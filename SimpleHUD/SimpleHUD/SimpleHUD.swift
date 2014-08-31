@@ -14,90 +14,98 @@ enum WaitingType{
     case WaitingTypeImageSplash
 }
 
-//private let _singletoneInstance = SimpleHUD.init(CGPointMake([UIScreen mainScreen].bounds.size.width/2, [UIScreen mainScreen].bounds.size.height/2))
 
+private let _singletoneInstance = SimpleHUD(center: CGPointMake(
+                                                                            UIScreen.mainScreen().bounds.size.width/2,
+                                                                            UIScreen.mainScreen().bounds.size.height/2)
+                                            )
+private let DARK_VIEW_HEIGHT:CGFloat = 150
+private let DARK_VIEW_WIDTH:CGFloat = 150
+
+private let ACTIVITY_INDICATOR_VIEW_HEIGHT:CGFloat = 65
+private let ACTIVITY_INDICATOR_VIEW_WIDTH:CGFloat = 65
+
+private let NUMBER_OF_LINES_LOADING_LINES = 2
 class SimpleHUD : UIView{
-//    var loadingText:NSString
+    var loadingText:NSString
+    var darkView:UIView?
+    var activityIndicatorView:UIActivityIndicatorView?
+    var loadingLabel:UILabel?
     
     required init(coder aDecoder: NSCoder!) {
+        self.loadingText = ""
+
         super.init(coder: aDecoder)
-        
-//        let a = SimpleHUD.init(frame: CGPointMake(UIScreen.mainScreen().bounds.size.width/2, UIScreen.mainScreen().bounds.size.height/2))
-//   
-        
     }
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init(center: CGPoint){
+        self.loadingText = ""
+
+        
+        super.init(frame: CGRect(origin: CGPointZero, size: UIScreen.mainScreen().bounds.size))
+        
+        //Customization
+        self.darkView = UIView(frame: CGRect(origin: CGPointZero,
+                                             size: CGSizeMake(DARK_VIEW_WIDTH,
+                                                              DARK_VIEW_HEIGHT))
+                              )
+        self.darkView!.center = center
+        self.darkView!.layer.cornerRadius = 10.0
+        self.darkView!.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.7)
+        
+        // create new dialog box view and component
+        self.activityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: .WhiteLarge)
+        self.activityIndicatorView!.bounds = CGRect(origin: CGPointZero,
+                                                    size: CGSizeMake(ACTIVITY_INDICATOR_VIEW_WIDTH,
+                                                                     ACTIVITY_INDICATOR_VIEW_HEIGHT)
+                                                    )
+
+        self.activityIndicatorView!.center = CGPointMake(self.darkView!.frame.size.width / 2.0,
+                                                         self.darkView!.frame.size.height / 2.0)
+        
+        self.activityIndicatorView!.hidesWhenStopped = true
+        
+        self.loadingLabel = UILabel(frame: CGRect(x: 0,
+                                                  y: self.activityIndicatorView!.frame.size.height,
+                                                  width: self.darkView!.frame.size.width,
+                                                  height: self.darkView!.frame.size.height - self.activityIndicatorView!.frame.size.height)
+                                    )
+        self.loadingLabel!.backgroundColor = UIColor.clearColor()
+        self.loadingLabel!.textColor = UIColor.whiteColor()
+        self.loadingLabel!.numberOfLines = NUMBER_OF_LINES_LOADING_LINES
+        self.loadingLabel!.font = UIFont(name: "HelveticaNeue-Bold", size: 20)
+        self.loadingLabel!.textAlignment = .Center
+        
+        if let _darkView = self.darkView{
+            _darkView.addSubview(self.loadingLabel!)
+            _darkView.addSubview(self.activityIndicatorView!)
+            
+            self.addSubview(_darkView)
+        }
     }
     
-    private let DARK_VIEW_HEIGHT = 150;
-    private let DARK_VIEW_WIDTH = 150;
-    
-    
-    leer: https://developer.apple.com/library/prerelease/ios/documentation/Swift/Conceptual/Swift_Programming_Language/Initialization.html
-    convenience init(defaultSizeAndCenter: CGPoint){
-        
-        let size:CGSize = CGSizeMake(UIScreen.mainScreen().bounds.size.width, UIScreen.mainScreen().bounds.size.height)
-        self.init(frame: CGRectMake(0, 0, size.width, size.height))
+    //Computed Property
+    class var shareWaitingView:SimpleHUD{
         
         
+        struct Static{
+            static var singletoneInstance = SimpleHUD(center: CGPointMake(
+                UIScreen.mainScreen().bounds.size.width/2,
+                UIScreen.mainScreen().bounds.size.height/2)
+            )
+            static var token: dispatch_once_t = 0
+        }
+        
+            dispatch_once(&Static.token){
+                Static.singletoneInstance = SimpleHUD(center: CGPointMake(
+                    UIScreen.mainScreen().bounds.size.width/2,
+                    UIScreen.mainScreen().bounds.size.height/2)
+                )
+            }
+        Static.singletoneInstance.loadingText = ""
+            
+        return Static.singletoneInstance
     }
-    
-//    static NSInteger DARK_VIEW_HEIGHT = 150;
-//    static NSInteger DARK_VIEW_WIDTH = 150;
-//    -(id)initDefaultSizeAndCenter:(CGPoint)center{
-//    
-//    self = [super initWithFrame:(CGRect){CGPointMake(0, 0), [UIScreen mainScreen].bounds.size}];
-//    if (self) {
-//    self.darkView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, DARK_VIEW_WIDTH, DARK_VIEW_HEIGHT)];
-//    self.darkView.center = center;
-//    
-//    // create new dialog box view and components
-//    self.activityIndicatorView = [[UIActivityIndicatorView alloc]
-//    initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-//    
-//    // other size? change it
-//    self.activityIndicatorView.bounds = CGRectMake(0, 0, 65, 65);
-//    self.activityIndicatorView.hidesWhenStopped = YES;
-//    
-//    self.loadingLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, self.activityIndicatorView.frame.size.height, self.darkView.frame.size.width, self.darkView.frame.size.height - self.activityIndicatorView.frame.size.height)];
-//    self.loadingLabel.backgroundColor = [UIColor clearColor];
-//    self.loadingLabel.textColor = [UIColor whiteColor];
-//    
-//    self.loadingLabel.numberOfLines = 2;
-//    self.loadingLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:20];
-//    self.loadingLabel.textAlignment = NSTextAlignmentCenter;
-//    
-//    self.darkView.layer.cornerRadius = 10.0f;
-//    self.darkView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.7];
-//    
-//    // display it in the center of your view
-//    self.loadingLabel.text = @"";
-//    [self.darkView addSubview:self.loadingLabel];
-//    [self.darkView addSubview:self.activityIndicatorView];
-//    self.activityIndicatorView.center = CGPointMake(self.darkView.frame.size.width / 2.0, self.darkView.frame.size.height / 2.0);
-//    
-//    [self addSubview:self.darkView];
-//    }
-//    return self;
-//    }
-    
-    
-//    class var shareWaitingView:SimpleHUD{
-//        return _singletoneInstance
-//    }
-    
-//    +(INCWaitingViewSimple *)shareWaitingView{
-//    static dispatch_once_t once;
-//    static INCWaitingViewSimple *waitingView;
-//    
-//    dispatch_once(&once, ^{
-//    waitingView = [[INCWaitingViewSimple alloc] initDefaultSizeAndCenter:CGPointMake([UIScreen mainScreen].bounds.size.width/2, [UIScreen mainScreen].bounds.size.height/2)];
-//    });
-//    waitingView.loadingText = @"";
-//    return waitingView;
-//    }
     
 }
 
