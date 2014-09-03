@@ -91,6 +91,7 @@ class SimpleHUD : UIView{
         self.loadingLabel.numberOfLines = NUMBER_OF_LINES_LOADING_LINES
         self.loadingLabel.font = UIFont(name: "HelveticaNeue-Bold", size: 20)
         self.loadingLabel.textAlignment = .Center
+        self.loadingLabel.text = self.loadingText
         
         self.darkView.addSubview(self.loadingLabel)
         self.darkView.addSubview(self.activityIndicatorView)
@@ -127,39 +128,19 @@ class SimpleHUD : UIView{
     
 
 
-//    func show()
-//    {
-//
-//
-//
-//
-//
-//// FIXME: Try with:  let window:UIWindow = UIApplication.sharedApplication().keyWindow
-//        let keyWindow:UIWindow = UIApplication.sharedApplication().delegate.window!!
-//        
-//        keyWindow.addSubview(self)
-//        if let activityIndicator = self.activityIndicatorView {
-//            activityIndicator.startAnimating()
-//        }
-//        if self.loadingLabel == nil || self.loadingLabel?.text.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) == 0 {
-//
-//        }
-//    }
+    func show()
+    {
+
+// FIXME: Try with:  let window:UIWindow = UIApplication.sharedApplication().keyWindow
+        let keyWindow:UIWindow = UIApplication.sharedApplication().delegate.window!!
+        
+        keyWindow.addSubview(self)
+        self.activityIndicatorView.startAnimating()
+        if self.loadingLabel.text.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) == 0 {
+            self.activityIndicatorView.center = CGPointMake(self.darkView.frame.size.width/2.0, self.darkView.frame.size.height/2.0)
+        }
+        else{
+            self.activityIndicatorView.center = CGPointMake(self.darkView.frame.size.width / 2.0, self.activityIndicatorView.frame.size.height / 2.0)
+        }
+    }
 }
-
-
-
-
-//-(void)show
-//    {
-//        UIWindow *keyWindow = [[[UIApplication sharedApplication] delegate] window];
-//        
-//        [keyWindow addSubview:self];
-//        [self.activityIndicatorView startAnimating];
-//        if (self.loadingLabel == NULL || self.loadingLabel.text.length == 0) {
-//            self.activityIndicatorView.center = CGPointMake(self.darkView.frame.size.width/2.0, self.darkView.frame.size.height/2.0);
-//        }
-//        else{
-//            self.activityIndicatorView.center = CGPointMake(self.darkView.frame.size.width / 2.0, self.activityIndicatorView.frame.size.height / 2.0);
-//        }
-//}

@@ -9,17 +9,47 @@
 import UIKit
 
 class ViewController: UIViewController {
-                            
+    
+    let INITIAL_REMAIN_TIME = 10
+
+    
+    @IBOutlet weak var simpleHUDButton: UIButton!
+    
+    var remainTime:Int = 0
+    var timer:NSTimer?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
 
 
+    @IBAction func activateSimpleHUDToucheIn(sender: AnyObject) {
+        
+        let buttonTouched = sender as UIButton
+        
+        SimpleHUD.shareWaitingView.show()
+
+        self.remainTime = INITIAL_REMAIN_TIME
+        
+        self.timer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: Selector("timerFire:"), userInfo: nil, repeats: true)
+        
+    }
+    
+    func timerFire(timer: NSTimer){
+        self.remainTime--
+        //We update the button label
+        self.simpleHUDButton.titleLabel.text = "Time remaining \(self.remainTime)"
+        if self.remainTime == 0 {
+            timer.invalidate()
+        }
+    }
+    
+    
 }
 
