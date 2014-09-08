@@ -36,6 +36,7 @@ class SimpleHUD : UIView{
     private let ACTIVITY_INDICATOR_VIEW_CODER_KEY = "ACTIVITY_INDICATOR_VIEW_CODER_KEY"
     private let LOADING_LABEL_CODER_KEY = "LOADING_LABEL_CODER_KEY"
     
+//MARK: - Init Methods
     required init(coder aDecoder: NSCoder) {
         self.loadingText = ""
         self.darkView = aDecoder.decodeObjectForKey(DARK_VIEW_CODER_KEY) as UIView
@@ -47,15 +48,6 @@ class SimpleHUD : UIView{
         
         super.init(coder: aDecoder)
         
-    }
-    
-    override func encodeWithCoder(aCoder: NSCoder) {
-        
-        aCoder.encodeObject(self.darkView, forKey: DARK_VIEW_CODER_KEY)
-        aCoder.encodeObject(self.activityIndicatorView, forKey: ACTIVITY_INDICATOR_VIEW_CODER_KEY)
-        aCoder.encodeObject(self.loadingLabel, forKey: LOADING_LABEL_CODER_KEY)
-        
-        super.encodeWithCoder(aCoder)
     }
     
     init(center: CGPoint){
@@ -78,11 +70,13 @@ class SimpleHUD : UIView{
                 ACTIVITY_INDICATOR_VIEW_HEIGHT)
         )
         
+        //We place the activity view in the center of the dark view
         self.activityIndicatorView.center = CGPointMake(self.darkView.frame.size.width / 2.0,
             self.darkView.frame.size.height / 2.0)
         
         self.activityIndicatorView.hidesWhenStopped = true
         
+        //We set up the label
         self.loadingLabel = UILabel(frame: CGRect(x: 0,
             y: self.activityIndicatorView.frame.size.height,
             width: self.darkView.frame.size.width,
@@ -95,10 +89,11 @@ class SimpleHUD : UIView{
         self.loadingLabel.textAlignment = .Center
         self.loadingLabel.text = self.loadingText
         
+        //We add the subviews
         self.darkView.addSubview(self.loadingLabel)
         self.darkView.addSubview(self.activityIndicatorView)
         
-        
+        //Finally we call our super
         super.init(frame: CGRect(origin: CGPointZero, size: UIScreen.mainScreen().bounds.size))
         
         self.addSubview(self.darkView)
@@ -108,7 +103,7 @@ class SimpleHUD : UIView{
     //Computed Property
     class var shareWaitingView:SimpleHUD{
         
-        
+        //We create a struct with the static and the predicate
         struct Static{
             static var singletoneInstance = SimpleHUD(center: CGPointMake(
                 UIScreen.mainScreen().bounds.size.width/2,
@@ -129,13 +124,27 @@ class SimpleHUD : UIView{
     }
     
 
-
+//MARK: - Public Methods
+    
+    override func encodeWithCoder(aCoder: NSCoder) {
+        
+        aCoder.encodeObject(self.darkView, forKey: DARK_VIEW_CODER_KEY)
+        aCoder.encodeObject(self.activityIndicatorView, forKey: ACTIVITY_INDICATOR_VIEW_CODER_KEY)
+        aCoder.encodeObject(self.loadingLabel, forKey: LOADING_LABEL_CODER_KEY)
+        
+        super.encodeWithCoder(aCoder)
+    }
+    
     func show()
     {
+        //We get the window
         let keyWindow:UIWindow = UIApplication.sharedApplication().keyWindow
         
+        //We add the view in the windows
         keyWindow.addSubview(self)
         self.activityIndicatorView.startAnimating()
+        
+        //If we have text we move the activity indicator
         let text:NSString! = self.loadingLabel.text;
         if  (text != nil && text.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) == 0) {
             self.activityIndicatorView.center = CGPointMake(self.darkView.frame.size.width/2.0, self.darkView.frame.size.height/2.0)

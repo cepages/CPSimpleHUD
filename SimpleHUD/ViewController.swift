@@ -48,6 +48,8 @@ class ViewController: UIViewController {
        
         if self.remainTime == 0 {
             SimpleHUD.shareWaitingView.hide()
+            self.simpleHUDButton.setTitle("Activate Simple HUD", forState:.Normal)
+
             timer.invalidate()
         }
     }
