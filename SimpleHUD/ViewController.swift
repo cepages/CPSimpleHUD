@@ -44,7 +44,7 @@ class ViewController: UIViewController {
     func timerFire(timer: NSTimer){
         self.remainTime--
         //We update the button label
-        self.simpleHUDButton.titleLabel.text = "Time remaining \(self.remainTime)"
+        self.simpleHUDButton.titleLabel!.text = "Time remaining \(self.remainTime)"
         if self.remainTime == 0 {
             timer.invalidate()
         }
