@@ -27,7 +27,6 @@ private let ACTIVITY_INDICATOR_VIEW_WIDTH:CGFloat = 65
 
 private let NUMBER_OF_LINES_LOADING_LINES = 2
 class SimpleHUD : UIView{
-    var loadingText:NSString
     var darkView:UIView
     var activityIndicatorView:UIActivityIndicatorView
     var loadingLabel:UILabel
@@ -38,21 +37,15 @@ class SimpleHUD : UIView{
     
 //MARK: - Init Methods
     required init(coder aDecoder: NSCoder) {
-        self.loadingText = ""
         self.darkView = aDecoder.decodeObjectForKey(DARK_VIEW_CODER_KEY) as UIView
         self.activityIndicatorView = aDecoder.decodeObjectForKey(ACTIVITY_INDICATOR_VIEW_CODER_KEY) as UIActivityIndicatorView
         self.loadingLabel = aDecoder.decodeObjectForKey(LOADING_LABEL_CODER_KEY) as UILabel
-        if let text = self.loadingLabel.text {
-            self.loadingText = text
-        }
         
         super.init(coder: aDecoder)
         
     }
     
     init(center: CGPoint){
-        self.loadingText = ""
-
         
         //Customization
         self.darkView = UIView(frame: CGRect(origin: CGPointZero,
@@ -87,7 +80,6 @@ class SimpleHUD : UIView{
         self.loadingLabel.numberOfLines = NUMBER_OF_LINES_LOADING_LINES
         self.loadingLabel.font = UIFont(name: "HelveticaNeue-Bold", size: 20)
         self.loadingLabel.textAlignment = .Center
-        self.loadingLabel.text = self.loadingText
         
         //We add the subviews
         self.darkView.addSubview(self.loadingLabel)
@@ -117,9 +109,7 @@ class SimpleHUD : UIView{
                     UIScreen.mainScreen().bounds.size.width/2,
                     UIScreen.mainScreen().bounds.size.height/2)
                 )
-            }
-        Static.singletoneInstance.loadingText = ""
-            
+            }            
         return Static.singletoneInstance
     }
     

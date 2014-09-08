@@ -33,7 +33,10 @@ class ViewController: UIViewController {
         
         let buttonTouched = sender as UIButton
         
-        SimpleHUD.shareWaitingView.show()
+        let hud = SimpleHUD.shareWaitingView
+        hud.loadingLabel.text = "Simple HUD"
+        hud.show()
+        
 
         self.remainTime = INITIAL_REMAIN_TIME
         

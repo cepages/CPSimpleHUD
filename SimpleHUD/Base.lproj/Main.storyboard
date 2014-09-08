@@ -2,6 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6206.9" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7026.1"/>
+        <capability name="Constraints with attributes relative to the layout margin" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
@@ -16,7 +17,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EVG-XE-eaT">
+                            <button opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EVG-XE-eaT">
                                 <rect key="frame" x="228" y="285" width="144" height="30"/>
                                 <state key="normal" title="Activate Simple HUD">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -28,9 +29,20 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="EVG-XE-eaT" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="2wS-Bg-dfs"/>
-                            <constraint firstItem="EVG-XE-eaT" firstAttribute="centerX" secondItem="y3c-jy-aDJ" secondAttribute="centerX" id="J4j-kK-9vt"/>
+                            <constraint firstItem="EVG-XE-eaT" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="4o1-hJ-9Fw"/>
+                            <constraint firstItem="EVG-XE-eaT" firstAttribute="centerX" secondItem="y3c-jy-aDJ" secondAttribute="centerX" id="Cei-gq-gIw"/>
+                            <constraint firstItem="EVG-XE-eaT" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="112" id="N7s-ad-nVl"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="N7s-ad-nVl"/>
+                            </mask>
+                        </variation>
+                        <variation key="heightClass=regular-widthClass=compact">
+                            <mask key="constraints">
+                                <include reference="N7s-ad-nVl"/>
+                            </mask>
+                        </variation>
                     </view>
                     <connections>
                         <outlet property="simpleHUDButton" destination="EVG-XE-eaT" id="jUE-Ct-ipP"/>
