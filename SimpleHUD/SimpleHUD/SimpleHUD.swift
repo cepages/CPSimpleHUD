@@ -140,7 +140,12 @@ class SimpleHUD : UIView{
             self.activityIndicatorView.center = CGPointMake(self.darkView.frame.size.width/2.0, self.darkView.frame.size.height/2.0)
         }
         else{
-            self.activityIndicatorView.center = CGPointMake(self.darkView.frame.size.width / 2.0, self.activityIndicatorView.frame.size.height / 2.0)
+            if (UIInterfaceOrientationIsLandscape(UIApplication.sharedApplication().statusBarOrientation)){
+                self.activityIndicatorView.center = CGPointMake(self.darkView.frame.size.width / 2.0, self.activityIndicatorView.frame.size.height / 2.0)
+            }
+            else{
+                self.activityIndicatorView.center = CGPointMake(self.darkView.frame.size.width / 2.0, self.activityIndicatorView.frame.size.height / 2.0)
+            }
         }
     }
     
