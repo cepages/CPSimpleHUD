@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		57C6FBBD19BE370700298F50 /* INCWaitingViewSimple.m in Sources */ = {isa = PBXBuildFile; fileRef = 57C6FBBC19BE370700298F50 /* INCWaitingViewSimple.m */; };
 		57F8618719AFAAE4009F5921 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F8618619AFAAE4009F5921 /* AppDelegate.swift */; };
 		57F8618919AFAAE4009F5921 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F8618819AFAAE4009F5921 /* ViewController.swift */; };
 		57F8618C19AFAAE4009F5921 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 57F8618A19AFAAE4009F5921 /* Main.storyboard */; };
@@ -26,6 +27,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		57C6FBBB19BE370700298F50 /* INCWaitingViewSimple.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = INCWaitingViewSimple.h; sourceTree = "<group>"; };
+		57C6FBBC19BE370700298F50 /* INCWaitingViewSimple.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = INCWaitingViewSimple.m; sourceTree = "<group>"; };
 		57F8618119AFAAE4009F5921 /* SimpleHUD.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SimpleHUD.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		57F8618519AFAAE4009F5921 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		57F8618619AFAAE4009F5921 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -80,6 +83,8 @@
 				57F8618619AFAAE4009F5921 /* AppDelegate.swift */,
 				57F8618819AFAAE4009F5921 /* ViewController.swift */,
 				57F861A319AFAE5B009F5921 /* SimpleHUD.swift */,
+				57C6FBBB19BE370700298F50 /* INCWaitingViewSimple.h */,
+				57C6FBBC19BE370700298F50 /* INCWaitingViewSimple.m */,
 				57F8618A19AFAAE4009F5921 /* Main.storyboard */,
 				57F8618D19AFAAE4009F5921 /* Images.xcassets */,
 				57F8618419AFAAE4009F5921 /* Supporting Files */,
@@ -214,6 +219,7 @@
 				57F8618919AFAAE4009F5921 /* ViewController.swift in Sources */,
 				57F861A419AFAE5B009F5921 /* SimpleHUD.swift in Sources */,
 				57F8618719AFAAE4009F5921 /* AppDelegate.swift in Sources */,
+				57C6FBBD19BE370700298F50 /* INCWaitingViewSimple.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

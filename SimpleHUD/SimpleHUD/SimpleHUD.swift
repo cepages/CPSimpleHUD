@@ -132,10 +132,7 @@ class SimpleHUD : UIView{
 
     func show()
     {
-
-// FIXME: Try with:  let window:UIWindow = UIApplication.sharedApplication().keyWindow
         let keyWindow:UIWindow = UIApplication.sharedApplication().keyWindow
-        //let keyWindow:UIWindow = UIApplication.sharedApplication().delegate.window!!
         
         keyWindow.addSubview(self)
         self.activityIndicatorView.startAnimating()
@@ -146,6 +143,10 @@ class SimpleHUD : UIView{
         else{
             self.activityIndicatorView.center = CGPointMake(self.darkView.frame.size.width / 2.0, self.activityIndicatorView.frame.size.height / 2.0)
         }
-        
+    }
+    
+    func hide()
+    {
+        self.removeFromSuperview()
     }
 }
