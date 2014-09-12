@@ -16,8 +16,8 @@ enum WaitingType{
 
 
 private let _singletoneInstance = SimpleHUD(center: CGPointMake(
-                                                                            UIScreen.mainScreen().bounds.size.width/2,
-                                                                            UIScreen.mainScreen().bounds.size.height/2)
+            UIScreen.mainScreen().bounds.size.width/2,
+            UIScreen.mainScreen().bounds.size.height/2)
                                             )
 private let DARK_VIEW_HEIGHT:CGFloat = 150
 private let DARK_VIEW_WIDTH:CGFloat = 150
@@ -27,9 +27,9 @@ private let ACTIVITY_INDICATOR_VIEW_WIDTH:CGFloat = 65
 
 private let NUMBER_OF_LINES_LOADING_LINES = 2
 class SimpleHUD : UIView{
-    var darkView:UIView
-    var activityIndicatorView:UIActivityIndicatorView
-    var loadingLabel:UILabel
+    let darkView:UIView
+    let activityIndicatorView:UIActivityIndicatorView
+    let loadingLabel:UILabel
     
     private let DARK_VIEW_CODER_KEY = "DARK_VIEW_CODER_KEY"
     private let ACTIVITY_INDICATOR_VIEW_CODER_KEY = "ACTIVITY_INDICATOR_VIEW_CODER_KEY"
