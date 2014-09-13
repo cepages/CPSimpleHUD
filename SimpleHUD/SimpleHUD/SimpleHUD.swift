@@ -16,8 +16,8 @@ enum WaitingType{
 
 
 private let _singletoneInstance = SimpleHUD(center: CGPointMake(
-                                                                            UIScreen.mainScreen().bounds.size.width/2,
-                                                                            UIScreen.mainScreen().bounds.size.height/2)
+            UIScreen.mainScreen().bounds.size.width/2,
+            UIScreen.mainScreen().bounds.size.height/2)
                                             )
 private let DARK_VIEW_HEIGHT:CGFloat = 150
 private let DARK_VIEW_WIDTH:CGFloat = 150
@@ -27,10 +27,9 @@ private let ACTIVITY_INDICATOR_VIEW_WIDTH:CGFloat = 65
 
 private let NUMBER_OF_LINES_LOADING_LINES = 2
 class SimpleHUD : UIView{
-    var loadingText:NSString
-    var darkView:UIView
-    var activityIndicatorView:UIActivityIndicatorView
-    var loadingLabel:UILabel
+    let darkView:UIView
+    let activityIndicatorView:UIActivityIndicatorView
+    let loadingLabel:UILabel
     
     private let DARK_VIEW_CODER_KEY = "DARK_VIEW_CODER_KEY"
     private let ACTIVITY_INDICATOR_VIEW_CODER_KEY = "ACTIVITY_INDICATOR_VIEW_CODER_KEY"
@@ -38,27 +37,22 @@ class SimpleHUD : UIView{
     
 //MARK: - Init Methods
     required init(coder aDecoder: NSCoder) {
-        self.loadingText = ""
         self.darkView = aDecoder.decodeObjectForKey(DARK_VIEW_CODER_KEY) as UIView
         self.activityIndicatorView = aDecoder.decodeObjectForKey(ACTIVITY_INDICATOR_VIEW_CODER_KEY) as UIActivityIndicatorView
         self.loadingLabel = aDecoder.decodeObjectForKey(LOADING_LABEL_CODER_KEY) as UILabel
-        if let text = self.loadingLabel.text {
-            self.loadingText = text
-        }
         
         super.init(coder: aDecoder)
         
     }
     
     init(center: CGPoint){
-        self.loadingText = ""
-
         
         //Customization
         self.darkView = UIView(frame: CGRect(origin: CGPointZero,
             size: CGSizeMake(DARK_VIEW_WIDTH,
                 DARK_VIEW_HEIGHT))
         )
+        
         self.darkView.center = center
         self.darkView.layer.cornerRadius = 10.0
         self.darkView.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.7)
@@ -87,7 +81,6 @@ class SimpleHUD : UIView{
         self.loadingLabel.numberOfLines = NUMBER_OF_LINES_LOADING_LINES
         self.loadingLabel.font = UIFont(name: "HelveticaNeue-Bold", size: 20)
         self.loadingLabel.textAlignment = .Center
-        self.loadingLabel.text = self.loadingText
         
         //We add the subviews
         self.darkView.addSubview(self.loadingLabel)
@@ -97,7 +90,6 @@ class SimpleHUD : UIView{
         super.init(frame: CGRect(origin: CGPointZero, size: UIScreen.mainScreen().bounds.size))
         
         self.addSubview(self.darkView)
-
     }
     
     //Computed Property
@@ -117,9 +109,7 @@ class SimpleHUD : UIView{
                     UIScreen.mainScreen().bounds.size.width/2,
                     UIScreen.mainScreen().bounds.size.height/2)
                 )
-            }
-        Static.singletoneInstance.loadingText = ""
-            
+            }            
         return Static.singletoneInstance
     }
     
@@ -137,6 +127,10 @@ class SimpleHUD : UIView{
     
     func show()
     {
+        self.frame = CGRect(origin: CGPointZero, size: UIScreen.mainScreen().bounds.size)
+        let center = CGPointMake(UIScreen.mainScreen().bounds.size.width/2, UIScreen.mainScreen().bounds.size.height/2)
+        self.darkView.center = center
+        
         //We get the window
         let keyWindow:UIWindow = UIApplication.sharedApplication().keyWindow
         
@@ -150,12 +144,27 @@ class SimpleHUD : UIView{
             self.activityIndicatorView.center = CGPointMake(self.darkView.frame.size.width/2.0, self.darkView.frame.size.height/2.0)
         }
         else{
-            self.activityIndicatorView.center = CGPointMake(self.darkView.frame.size.width / 2.0, self.activityIndicatorView.frame.size.height / 2.0)
+            if (UIInterfaceOrientationIsLandscape(UIApplication.sharedApplication().statusBarOrientation)){
+                self.activityIndicatorView.center = CGPointMake(self.darkView.frame.size.width / 2.0, self.activityIndicatorView.frame.size.height / 2.0)
+            }
+            else{
+                self.activityIndicatorView.center = CGPointMake(self.darkView.frame.size.width / 2.0, self.activityIndicatorView.frame.size.height / 2.0)
+            }
         }
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("orientationHasChanged:"), name: UIApplicationDidChangeStatusBarOrientationNotification, object: nil)
     }
     
     func hide()
     {
+        NSNotificationCenter.defaultCenter().removeObserver(self, name:UIApplicationDidChangeStatusBarOrientationNotification , object: nil)
         self.removeFromSuperview()
+    }
+    
+    
+    func orientationHasChanged(notification:NSNotification)
+    {
+        self.frame = CGRect(origin: CGPointZero, size: UIScreen.mainScreen().bounds.size)
+        let center = CGPointMake(UIScreen.mainScreen().bounds.size.width/2, UIScreen.mainScreen().bounds.size.height/2)
+        self.darkView.center = center
     }
 }
