@@ -52,6 +52,7 @@ class SimpleHUD : UIView{
             size: CGSizeMake(DARK_VIEW_WIDTH,
                 DARK_VIEW_HEIGHT))
         )
+        
         self.darkView.center = center
         self.darkView.layer.cornerRadius = 10.0
         self.darkView.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.7)
@@ -89,7 +90,6 @@ class SimpleHUD : UIView{
         super.init(frame: CGRect(origin: CGPointZero, size: UIScreen.mainScreen().bounds.size))
         
         self.addSubview(self.darkView)
-
     }
     
     //Computed Property
@@ -127,6 +127,10 @@ class SimpleHUD : UIView{
     
     func show()
     {
+        self.frame = CGRect(origin: CGPointZero, size: UIScreen.mainScreen().bounds.size)
+        let center = CGPointMake(UIScreen.mainScreen().bounds.size.width/2, UIScreen.mainScreen().bounds.size.height/2)
+        self.darkView.center = center
+        
         //We get the window
         let keyWindow:UIWindow = UIApplication.sharedApplication().keyWindow
         
@@ -147,10 +151,20 @@ class SimpleHUD : UIView{
                 self.activityIndicatorView.center = CGPointMake(self.darkView.frame.size.width / 2.0, self.activityIndicatorView.frame.size.height / 2.0)
             }
         }
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("orientationHasChanged:"), name: UIApplicationDidChangeStatusBarOrientationNotification, object: nil)
     }
     
     func hide()
     {
+        NSNotificationCenter.defaultCenter().removeObserver(self, name:UIApplicationDidChangeStatusBarOrientationNotification , object: nil)
         self.removeFromSuperview()
+    }
+    
+    
+    func orientationHasChanged(notification:NSNotification)
+    {
+        self.frame = CGRect(origin: CGPointZero, size: UIScreen.mainScreen().bounds.size)
+        let center = CGPointMake(UIScreen.mainScreen().bounds.size.width/2, UIScreen.mainScreen().bounds.size.height/2)
+        self.darkView.center = center
     }
 }
