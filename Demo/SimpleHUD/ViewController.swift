@@ -33,7 +33,7 @@ class ViewController: UIViewController {
         
         let buttonTouched = sender as UIButton
         
-        let hud = SimpleHUD.shareWaitingView
+        let hud = CPSimpleHUD.shareWaitingView
         hud.loadingLabel.text = "Simple HUD"
         hud.show()
         
@@ -50,7 +50,7 @@ class ViewController: UIViewController {
         self.simpleHUDButton.setTitle("Time remaining \(self.remainTime)", forState:.Normal)
        
         if self.remainTime == 0 {
-            SimpleHUD.shareWaitingView.hide()
+            CPSimpleHUD.shareWaitingView.hide()
             self.simpleHUDButton.setTitle("Activate Simple HUD", forState:.Normal)
 
             timer.invalidate()

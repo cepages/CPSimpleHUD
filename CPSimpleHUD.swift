@@ -1,6 +1,6 @@
 //
-//  SimpleHUD.swift
-//  SimpleHUD
+//  CPSimpleHUD.swift
+//  CPSimpleHUD
 //
 //  Created by Carlos Pages on 28/08/2014.
 //  Copyright (c) 2014 k4Nt30. All rights reserved.
@@ -15,7 +15,7 @@ enum WaitingType{
 }
 
 
-private let _singletoneInstance = SimpleHUD(center: CGPointMake(
+private let _singletoneInstance = CPSimpleHUD(center: CGPointMake(
             UIScreen.mainScreen().bounds.size.width/2,
             UIScreen.mainScreen().bounds.size.height/2)
                                             )
@@ -26,9 +26,16 @@ private let ACTIVITY_INDICATOR_VIEW_HEIGHT:CGFloat = 65
 private let ACTIVITY_INDICATOR_VIEW_WIDTH:CGFloat = 65
 
 private let NUMBER_OF_LINES_LOADING_LINES = 2
-class SimpleHUD : UIView{
+
+class CPSimpleHUD : UIView{
+    /*
+        Dark view in the background over the window and under the activity indicator
+    */
     let darkView:UIView
     private let activityIndicatorView:UIActivityIndicatorView
+    /*
+        Label shown when the activity indicator is running, if it's nil or the text it's empty nothing will show and the activity indicator will be placed in the middle of the dark view
+    */
     let loadingLabel:UILabel
     
     private let DARK_VIEW_CODER_KEY = "DARK_VIEW_CODER_KEY"
@@ -93,11 +100,11 @@ class SimpleHUD : UIView{
     }
     
     //Computed Property
-    class var shareWaitingView:SimpleHUD{
+    class var shareWaitingView:CPSimpleHUD{
         
         //We create a struct with the static and the predicate
         struct Static{
-            static var singletoneInstance = SimpleHUD(center: CGPointMake(
+            static var singletoneInstance = CPSimpleHUD(center: CGPointMake(
                 UIScreen.mainScreen().bounds.size.width/2,
                 UIScreen.mainScreen().bounds.size.height/2)
             )
@@ -105,12 +112,21 @@ class SimpleHUD : UIView{
         }
         
             dispatch_once(&Static.token){
-                Static.singletoneInstance = SimpleHUD(center: CGPointMake(
+                Static.singletoneInstance = CPSimpleHUD(center: CGPointMake(
                     UIScreen.mainScreen().bounds.size.width/2,
                     UIScreen.mainScreen().bounds.size.height/2)
                 )
             }            
         return Static.singletoneInstance
+    }
+    
+//MARK: - Notification Methods
+    
+    func orientationHasChanged(notification:NSNotification)
+    {
+        self.frame = CGRect(origin: CGPointZero, size: UIScreen.mainScreen().bounds.size)
+        let center = CGPointMake(UIScreen.mainScreen().bounds.size.width/2, UIScreen.mainScreen().bounds.size.height/2)
+        self.darkView.center = center
     }
     
 
@@ -125,6 +141,9 @@ class SimpleHUD : UIView{
         super.encodeWithCoder(aCoder)
     }
     
+    /*
+        This method show the HUD checking first the device orientation.
+    */
     func show()
     {
         self.frame = CGRect(origin: CGPointZero, size: UIScreen.mainScreen().bounds.size)
@@ -154,6 +173,9 @@ class SimpleHUD : UIView{
         NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("orientationHasChanged:"), name: UIApplicationDidChangeStatusBarOrientationNotification, object: nil)
     }
     
+    /*
+        This method hide the HUD
+    */
     func hide()
     {
         NSNotificationCenter.defaultCenter().removeObserver(self, name:UIApplicationDidChangeStatusBarOrientationNotification , object: nil)
@@ -161,10 +183,5 @@ class SimpleHUD : UIView{
     }
     
     
-    func orientationHasChanged(notification:NSNotification)
-    {
-        self.frame = CGRect(origin: CGPointZero, size: UIScreen.mainScreen().bounds.size)
-        let center = CGPointMake(UIScreen.mainScreen().bounds.size.width/2, UIScreen.mainScreen().bounds.size.height/2)
-        self.darkView.center = center
-    }
+    
 }
