@@ -12,7 +12,7 @@
 		57F8618C19AFAAE4009F5921 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 57F8618A19AFAAE4009F5921 /* Main.storyboard */; };
 		57F8618E19AFAAE4009F5921 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 57F8618D19AFAAE4009F5921 /* Images.xcassets */; };
 		57F8619A19AFAAE4009F5921 /* SimpleHUDTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F8619919AFAAE4009F5921 /* SimpleHUDTests.swift */; };
-		57F861A419AFAE5B009F5921 /* SimpleHUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F861A319AFAE5B009F5921 /* SimpleHUD.swift */; };
+		57F861A419AFAE5B009F5921 /* CPSimpleHUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F861A319AFAE5B009F5921 /* CPSimpleHUD.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,7 +35,7 @@
 		57F8619319AFAAE4009F5921 /* SimpleHUDTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SimpleHUDTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		57F8619819AFAAE4009F5921 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		57F8619919AFAAE4009F5921 /* SimpleHUDTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleHUDTests.swift; sourceTree = "<group>"; };
-		57F861A319AFAE5B009F5921 /* SimpleHUD.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SimpleHUD.swift; path = SimpleHUD/SimpleHUD.swift; sourceTree = "<group>"; };
+		57F861A319AFAE5B009F5921 /* CPSimpleHUD.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CPSimpleHUD.swift; path = SimpleHUD/CPSimpleHUD.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,7 +79,7 @@
 			children = (
 				57F8618619AFAAE4009F5921 /* AppDelegate.swift */,
 				57F8618819AFAAE4009F5921 /* ViewController.swift */,
-				57F861A319AFAE5B009F5921 /* SimpleHUD.swift */,
+				57F861A319AFAE5B009F5921 /* CPSimpleHUD.swift */,
 				57F8618A19AFAAE4009F5921 /* Main.storyboard */,
 				57F8618D19AFAAE4009F5921 /* Images.xcassets */,
 				57F8618419AFAAE4009F5921 /* Supporting Files */,
@@ -212,7 +212,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				57F8618919AFAAE4009F5921 /* ViewController.swift in Sources */,
-				57F861A419AFAE5B009F5921 /* SimpleHUD.swift in Sources */,
+				57F861A419AFAE5B009F5921 /* CPSimpleHUD.swift in Sources */,
 				57F8618719AFAAE4009F5921 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

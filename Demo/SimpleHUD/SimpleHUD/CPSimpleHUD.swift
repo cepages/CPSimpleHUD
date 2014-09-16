@@ -1,6 +1,6 @@
 //
-//  SimpleHUD.swift
-//  SimpleHUD
+//  CPSimpleHUD.swift
+//  CPSimpleHUD
 //
 //  Created by Carlos Pages on 28/08/2014.
 //  Copyright (c) 2014 k4Nt30. All rights reserved.
@@ -15,7 +15,7 @@ enum WaitingType{
 }
 
 
-private let _singletoneInstance = SimpleHUD(center: CGPointMake(
+private let _singletoneInstance = CPSimpleHUD(center: CGPointMake(
             UIScreen.mainScreen().bounds.size.width/2,
             UIScreen.mainScreen().bounds.size.height/2)
                                             )
@@ -26,7 +26,8 @@ private let ACTIVITY_INDICATOR_VIEW_HEIGHT:CGFloat = 65
 private let ACTIVITY_INDICATOR_VIEW_WIDTH:CGFloat = 65
 
 private let NUMBER_OF_LINES_LOADING_LINES = 2
-class SimpleHUD : UIView{
+
+class CPSimpleHUD : UIView{
     let darkView:UIView
     private let activityIndicatorView:UIActivityIndicatorView
     let loadingLabel:UILabel
@@ -93,11 +94,11 @@ class SimpleHUD : UIView{
     }
     
     //Computed Property
-    class var shareWaitingView:SimpleHUD{
+    class var shareWaitingView:CPSimpleHUD{
         
         //We create a struct with the static and the predicate
         struct Static{
-            static var singletoneInstance = SimpleHUD(center: CGPointMake(
+            static var singletoneInstance = CPSimpleHUD(center: CGPointMake(
                 UIScreen.mainScreen().bounds.size.width/2,
                 UIScreen.mainScreen().bounds.size.height/2)
             )
@@ -105,7 +106,7 @@ class SimpleHUD : UIView{
         }
         
             dispatch_once(&Static.token){
-                Static.singletoneInstance = SimpleHUD(center: CGPointMake(
+                Static.singletoneInstance = CPSimpleHUD(center: CGPointMake(
                     UIScreen.mainScreen().bounds.size.width/2,
                     UIScreen.mainScreen().bounds.size.height/2)
                 )
