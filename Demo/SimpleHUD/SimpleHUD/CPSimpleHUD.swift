@@ -28,8 +28,14 @@ private let ACTIVITY_INDICATOR_VIEW_WIDTH:CGFloat = 65
 private let NUMBER_OF_LINES_LOADING_LINES = 2
 
 class CPSimpleHUD : UIView{
+    /*
+        Dark view in the background over the window and under the activity indicator
+    */
     let darkView:UIView
     private let activityIndicatorView:UIActivityIndicatorView
+    /*
+        Label shown when the activity indicator is running, if it's nil or the text it's empty nothing will show and the activity indicator will be placed in the middle of the dark view
+    */
     let loadingLabel:UILabel
     
     private let DARK_VIEW_CODER_KEY = "DARK_VIEW_CODER_KEY"
@@ -114,6 +120,15 @@ class CPSimpleHUD : UIView{
         return Static.singletoneInstance
     }
     
+//MARK: - Notification Methods
+    
+    func orientationHasChanged(notification:NSNotification)
+    {
+        self.frame = CGRect(origin: CGPointZero, size: UIScreen.mainScreen().bounds.size)
+        let center = CGPointMake(UIScreen.mainScreen().bounds.size.width/2, UIScreen.mainScreen().bounds.size.height/2)
+        self.darkView.center = center
+    }
+    
 
 //MARK: - Public Methods
     
@@ -126,6 +141,9 @@ class CPSimpleHUD : UIView{
         super.encodeWithCoder(aCoder)
     }
     
+    /*
+        This method show the HUD checking first the device orientation.
+    */
     func show()
     {
         self.frame = CGRect(origin: CGPointZero, size: UIScreen.mainScreen().bounds.size)
@@ -155,6 +173,9 @@ class CPSimpleHUD : UIView{
         NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("orientationHasChanged:"), name: UIApplicationDidChangeStatusBarOrientationNotification, object: nil)
     }
     
+    /*
+        This method hide the HUD
+    */
     func hide()
     {
         NSNotificationCenter.defaultCenter().removeObserver(self, name:UIApplicationDidChangeStatusBarOrientationNotification , object: nil)
@@ -162,10 +183,5 @@ class CPSimpleHUD : UIView{
     }
     
     
-    func orientationHasChanged(notification:NSNotification)
-    {
-        self.frame = CGRect(origin: CGPointZero, size: UIScreen.mainScreen().bounds.size)
-        let center = CGPointMake(UIScreen.mainScreen().bounds.size.width/2, UIScreen.mainScreen().bounds.size.height/2)
-        self.darkView.center = center
-    }
+    
 }
