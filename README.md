@@ -8,11 +8,11 @@ SimpleHUD works on any iOS version and is compatible with swift.
 
 To show the HUD just:
 
-SimpleHUD.shareWaitingView.show()
+CPSimpleHUD.shareWaitingView.show()
 
 To show the HUD just:
 
-SimpleHUD.shareWaitingView.hide()
+CPSimpleHUD.shareWaitingView.hide()
 
 The dark view in the background and the label are customisable.
 
@@ -24,4 +24,4 @@ Frameworks required:
 * Foundation.framework
 * UIKit.framework
 
-Just copy the SimpleHUD.swift file in your project.
+Just copy the CPSimpleHUD.swift file in your project.
