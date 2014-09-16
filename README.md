@@ -3,7 +3,8 @@
 SimpleHUD works on any iOS version and is compatible with swift.
 
 ![HUD.gif](https://bitbucket.org/repo/GAA9rq/images/3304417787-HUD.gif)
-### To use it ###
+
+### How use it ###
 
 To show the HUD just:
 
