@@ -7,12 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		579C011219C8CA0D00AB8056 /* CPSimpleHUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579C011119C8CA0D00AB8056 /* CPSimpleHUD.swift */; };
 		57F8618719AFAAE4009F5921 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F8618619AFAAE4009F5921 /* AppDelegate.swift */; };
 		57F8618919AFAAE4009F5921 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F8618819AFAAE4009F5921 /* ViewController.swift */; };
 		57F8618C19AFAAE4009F5921 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 57F8618A19AFAAE4009F5921 /* Main.storyboard */; };
 		57F8618E19AFAAE4009F5921 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 57F8618D19AFAAE4009F5921 /* Images.xcassets */; };
 		57F8619A19AFAAE4009F5921 /* SimpleHUDTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F8619919AFAAE4009F5921 /* SimpleHUDTests.swift */; };
-		57F861A419AFAE5B009F5921 /* CPSimpleHUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F861A319AFAE5B009F5921 /* CPSimpleHUD.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -26,6 +26,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		579C011119C8CA0D00AB8056 /* CPSimpleHUD.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CPSimpleHUD.swift; sourceTree = "<group>"; };
 		57F8618119AFAAE4009F5921 /* SimpleHUD.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SimpleHUD.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		57F8618519AFAAE4009F5921 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		57F8618619AFAAE4009F5921 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -35,7 +36,6 @@
 		57F8619319AFAAE4009F5921 /* SimpleHUDTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SimpleHUDTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		57F8619819AFAAE4009F5921 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		57F8619919AFAAE4009F5921 /* SimpleHUDTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleHUDTests.swift; sourceTree = "<group>"; };
-		57F861A319AFAE5B009F5921 /* CPSimpleHUD.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CPSimpleHUD.swift; path = SimpleHUD/CPSimpleHUD.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,10 +56,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		579C011019C8C97600AB8056 /* SimpleHUD */ = {
+			isa = PBXGroup;
+			children = (
+				579C011119C8CA0D00AB8056 /* CPSimpleHUD.swift */,
+			);
+			name = SimpleHUD;
+			path = ../../SimpleHUD;
+			sourceTree = "<group>";
+		};
 		57F8617819AFAAE4009F5921 = {
 			isa = PBXGroup;
 			children = (
-				57F8618319AFAAE4009F5921 /* SimpleHUD */,
+				57F8618319AFAAE4009F5921 /* SimpleHUD Demo */,
 				57F8619619AFAAE4009F5921 /* SimpleHUDTests */,
 				57F8618219AFAAE4009F5921 /* Products */,
 			);
@@ -74,16 +83,17 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		57F8618319AFAAE4009F5921 /* SimpleHUD */ = {
+		57F8618319AFAAE4009F5921 /* SimpleHUD Demo */ = {
 			isa = PBXGroup;
 			children = (
+				579C011019C8C97600AB8056 /* SimpleHUD */,
 				57F8618619AFAAE4009F5921 /* AppDelegate.swift */,
 				57F8618819AFAAE4009F5921 /* ViewController.swift */,
-				57F861A319AFAE5B009F5921 /* CPSimpleHUD.swift */,
 				57F8618A19AFAAE4009F5921 /* Main.storyboard */,
 				57F8618D19AFAAE4009F5921 /* Images.xcassets */,
 				57F8618419AFAAE4009F5921 /* Supporting Files */,
 			);
+			name = "SimpleHUD Demo";
 			path = SimpleHUD;
 			sourceTree = "<group>";
 		};
@@ -212,8 +222,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				57F8618919AFAAE4009F5921 /* ViewController.swift in Sources */,
-				57F861A419AFAE5B009F5921 /* CPSimpleHUD.swift in Sources */,
 				57F8618719AFAAE4009F5921 /* AppDelegate.swift in Sources */,
+				579C011219C8CA0D00AB8056 /* CPSimpleHUD.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
