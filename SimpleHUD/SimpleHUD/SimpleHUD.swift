@@ -28,7 +28,7 @@ private let ACTIVITY_INDICATOR_VIEW_WIDTH:CGFloat = 65
 private let NUMBER_OF_LINES_LOADING_LINES = 2
 class SimpleHUD : UIView{
     let darkView:UIView
-    let activityIndicatorView:UIActivityIndicatorView
+    private let activityIndicatorView:UIActivityIndicatorView
     let loadingLabel:UILabel
     
     private let DARK_VIEW_CODER_KEY = "DARK_VIEW_CODER_KEY"
