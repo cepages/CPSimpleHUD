@@ -19,8 +19,8 @@ private let _singletoneInstance = CPSimpleHUD(center: CGPointMake(
             UIScreen.mainScreen().bounds.size.width/2,
             UIScreen.mainScreen().bounds.size.height/2)
                                             )
-private let DARK_VIEW_HEIGHT:CGFloat = 150
-private let DARK_VIEW_WIDTH:CGFloat = 150
+private let DARK_VIEW_HEIGHT:Float = 150
+private let DARK_VIEW_WIDTH:Float = 150
 
 private let ACTIVITY_INDICATOR_VIEW_HEIGHT:CGFloat = 65
 private let ACTIVITY_INDICATOR_VIEW_WIDTH:CGFloat = 65
@@ -56,8 +56,8 @@ class CPSimpleHUD : UIView{
         
         //Customization
         self.darkView = UIView(frame: CGRect(origin: CGPointZero,
-            size: CGSizeMake(DARK_VIEW_WIDTH,
-                DARK_VIEW_HEIGHT))
+            size: CGSizeMake(CGFloat(DARK_VIEW_WIDTH),
+                CGFloat(DARK_VIEW_HEIGHT)))
         )
         
         self.darkView.center = center
@@ -88,6 +88,7 @@ class CPSimpleHUD : UIView{
         self.loadingLabel.numberOfLines = NUMBER_OF_LINES_LOADING_LINES
         self.loadingLabel.font = UIFont(name: "HelveticaNeue-Bold", size: 20)
         self.loadingLabel.textAlignment = .Center
+        self.loadingLabel.text = ""
         
         //We add the subviews
         self.darkView.addSubview(self.loadingLabel)
@@ -97,6 +98,20 @@ class CPSimpleHUD : UIView{
         super.init(frame: CGRect(origin: CGPointZero, size: UIScreen.mainScreen().bounds.size))
         
         self.addSubview(self.darkView)
+    
+        self.darkView.setTranslatesAutoresizingMaskIntoConstraints(false)
+
+        let contraintCenterX = NSLayoutConstraint(item: self.darkView, attribute:.CenterX, relatedBy: .Equal, toItem: self, attribute: .CenterX, multiplier: 1.0, constant: 0)
+        let contraintCenterY = NSLayoutConstraint(item: self.darkView, attribute:.CenterY, relatedBy: .Equal, toItem: self, attribute: .CenterY, multiplier: 1.0, constant: 0)
+        self.addConstraint(contraintCenterX)
+        self.addConstraint(contraintCenterY)
+        
+        let views = NSDictionary(objects: [self.darkView], forKeys: ["darkView"])
+        let metrics = NSDictionary(objects: [NSNumber(float:DARK_VIEW_WIDTH),NSNumber(float:DARK_VIEW_HEIGHT)], forKeys: ["darkViewWidth","darkViewHeight"])
+        self.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:[darkView(darkViewWidth)]", options: NSLayoutFormatOptions(0), metrics: metrics, views: views))
+        self.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:[darkView(darkViewHeight)]", options: NSLayoutFormatOptions(0), metrics: metrics, views: views))
+        
+
     }
     
     //Computed Property
@@ -182,6 +197,9 @@ class CPSimpleHUD : UIView{
         self.removeFromSuperview()
     }
     
+    override func intrinsicContentSize() -> CGSize {
+        return UIScreen.mainScreen().bounds.size
+    }
     
     
 }
