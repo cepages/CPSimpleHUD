@@ -38,19 +38,19 @@ class CPSimpleHUD : UIView{
     */
     let loadingLabel:UILabel
     
-    private let activityIndicatorCenterInY:NSLayoutConstraint
+    private var contraintActivityIndicator_loadingLabel:NSLayoutConstraint
     
     private let DARK_VIEW_CODER_KEY = "DARK_VIEW_CODER_KEY"
     private let ACTIVITY_INDICATOR_VIEW_CODER_KEY = "ACTIVITY_INDICATOR_VIEW_CODER_KEY"
     private let LOADING_LABEL_CODER_KEY = "LOADING_LABEL_CODER_KEY"
-    private let ACTIVITY_INDICATOR_CENTER_Y_CODER_KEY = "ACTIVITY_INDICATOR_CENTER_Y_CODER_KEY"
+    private let ACTIVITY_INDICATOR_LOADING_LABEL_CODER_KEY = "ACTIVITY_INDICATOR_LOADING_LABEL_CODER_KEY"
     
 //MARK: - Init Methods
     required init(coder aDecoder: NSCoder) {
         self.darkView = aDecoder.decodeObjectForKey(DARK_VIEW_CODER_KEY) as UIView
         self.activityIndicatorView = aDecoder.decodeObjectForKey(ACTIVITY_INDICATOR_VIEW_CODER_KEY) as UIActivityIndicatorView
         self.loadingLabel = aDecoder.decodeObjectForKey(LOADING_LABEL_CODER_KEY) as UILabel
-        self.activityIndicatorCenterInY = aDecoder.decodeObjectForKey(ACTIVITY_INDICATOR_CENTER_Y_CODER_KEY) as NSLayoutConstraint
+        self.contraintActivityIndicator_loadingLabel = aDecoder.decodeObjectForKey(ACTIVITY_INDICATOR_LOADING_LABEL_CODER_KEY) as NSLayoutConstraint
         
         super.init(coder: aDecoder)
         
@@ -95,33 +95,44 @@ class CPSimpleHUD : UIView{
         self.loadingLabel.text = ""
         
         //We add the subviews
-        //self.darkView.addSubview(self.loadingLabel)
+        self.darkView.addSubview(self.loadingLabel)
         self.darkView.addSubview(self.activityIndicatorView)
         
-        //self.loadingLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
-        self.activityIndicatorView.setTranslatesAutoresizingMaskIntoConstraints(false)
-        
-        let viewsInDarkView = NSDictionary(objects: [self.loadingLabel,self.activityIndicatorView], forKeys: ["loadingLabel","activityIndicatorView"])
-        let metricsInDarkView = ["activityIndicatorViewWidth":NSNumber(float: ACTIVITY_INDICATOR_VIEW_WIDTH),
-                                 "activityIndicatorViewHeight":NSNumber(float: ACTIVITY_INDICATOR_VIEW_HEIGHT)] as NSDictionary
-        
-        self.darkView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:[activityIndicatorView(activityIndicatorViewWidth)]", options: NSLayoutFormatOptions(0), metrics: metricsInDarkView, views: viewsInDarkView))
-        self.darkView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:[activityIndicatorView(activityIndicatorViewHeight)]", options: NSLayoutFormatOptions(0), metrics: metricsInDarkView, views: viewsInDarkView))
-        
-        self.activityIndicatorCenterInY = NSLayoutConstraint(item:self.activityIndicatorView, attribute: .CenterY, relatedBy: .Equal, toItem: self.darkView, attribute: .CenterY, multiplier: 1.0, constant: 0)
-        let centerInX:NSLayoutConstraint = NSLayoutConstraint(item:self.activityIndicatorView, attribute: .CenterX, relatedBy: .Equal, toItem: self.darkView, attribute: .CenterX, multiplier: 1.0, constant: 0)
-        
-        self.darkView.addConstraint(centerInX)
-        self.darkView.addConstraint(self.activityIndicatorCenterInY)
-
+        self.contraintActivityIndicator_loadingLabel = NSLayoutConstraint(item: self.activityIndicatorView, attribute: .Bottom, relatedBy: .Equal, toItem: self.loadingLabel, attribute: .Top, multiplier: 1.0, constant: 0)
         
         //Finally we call our super
         super.init(frame: CGRect(origin: CGPointZero, size: UIScreen.mainScreen().bounds.size))
         
         self.addSubview(self.darkView)
     
-        self.darkView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        self.setUpDarkViewAutoLayout()
+    }
+    
+    func setUpDarkViewAutoLayout(){
+        self.loadingLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
+        self.activityIndicatorView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        
+        let viewsInDarkView = NSDictionary(objects: [self.loadingLabel,self.activityIndicatorView], forKeys: ["loadingLabel","activityIndicatorView"])
+        let metricsInDarkView = ["activityIndicatorViewWidth":NSNumber(float: ACTIVITY_INDICATOR_VIEW_WIDTH),
+            "activityIndicatorViewHeight":NSNumber(float: ACTIVITY_INDICATOR_VIEW_HEIGHT)] as NSDictionary
+        
+        self.darkView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:[activityIndicatorView(activityIndicatorViewWidth)]", options: NSLayoutFormatOptions(0), metrics: metricsInDarkView, views: viewsInDarkView))
+        self.darkView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:[activityIndicatorView(activityIndicatorViewHeight)]", options: NSLayoutFormatOptions(0), metrics: metricsInDarkView, views: viewsInDarkView))
+        
+        
+        let centerInY = NSLayoutConstraint(item:self.loadingLabel, attribute: .CenterY, relatedBy: .Equal, toItem: self.darkView, attribute: .CenterY, multiplier: 1.0, constant: 0)
+        let centerInX = NSLayoutConstraint(item:self.loadingLabel, attribute: .CenterX, relatedBy: .Equal, toItem: self.darkView, attribute: .CenterX, multiplier: 1.0, constant: 0)
+        let centerInXActivityIndicator = NSLayoutConstraint(item:self.activityIndicatorView, attribute: .CenterX, relatedBy: .Equal, toItem: self.darkView, attribute: .CenterX, multiplier: 1.0, constant: 0)
+        
+        self.darkView.addConstraint(centerInX)
+        self.darkView.addConstraint(centerInY)
+        self.darkView.addConstraint(centerInXActivityIndicator)
+        
+        self.darkView.addConstraint(self.contraintActivityIndicator_loadingLabel)
 
+        
+        self.darkView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        
         let contraintCenterX = NSLayoutConstraint(item: self.darkView, attribute:.CenterX, relatedBy: .Equal, toItem: self, attribute: .CenterX, multiplier: 1.0, constant: 0)
         let contraintCenterY = NSLayoutConstraint(item: self.darkView, attribute:.CenterY, relatedBy: .Equal, toItem: self, attribute: .CenterY, multiplier: 1.0, constant: 0)
         self.addConstraint(contraintCenterX)
@@ -131,8 +142,6 @@ class CPSimpleHUD : UIView{
         let metrics = NSDictionary(objects: [NSNumber(float:DARK_VIEW_WIDTH),NSNumber(float:DARK_VIEW_HEIGHT)], forKeys: ["darkViewWidth","darkViewHeight"])
         self.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:[darkView(darkViewWidth)]", options: NSLayoutFormatOptions(0), metrics: metrics, views: views))
         self.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:[darkView(darkViewHeight)]", options: NSLayoutFormatOptions(0), metrics: metrics, views: views))
-        
-
     }
     
     //Computed Property
@@ -192,15 +201,20 @@ class CPSimpleHUD : UIView{
         //We add the view in the windows
         keyWindow.addSubview(self)
         self.activityIndicatorView.startAnimating()
-        
-        self.activityIndicatorCenterInY.constant = 
+        self.darkView.removeConstraint(self.contraintActivityIndicator_loadingLabel)
+
         
         //If we have text we move the activity indicator
         let text:NSString! = self.loadingLabel.text;
         if  (text != nil && text.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) == 0) {
-            self.activityIndicatorView.center = CGPointMake(self.darkView.frame.size.width/2.0, self.darkView.frame.size.height/2.0)
+            self.contraintActivityIndicator_loadingLabel = NSLayoutConstraint(item:self.activityIndicatorView, attribute: .CenterY, relatedBy: .Equal, toItem: self.darkView, attribute: .CenterY, multiplier: 1.0, constant: 0)
+            self.darkView.addConstraint(self.contraintActivityIndicator_loadingLabel)
         }
         else{
+            self.contraintActivityIndicator_loadingLabel = NSLayoutConstraint(item: self.activityIndicatorView, attribute: .Bottom, relatedBy: .Equal, toItem: self.loadingLabel, attribute: .Top, multiplier: 1.0, constant: 0)
+            
+            self.darkView.addConstraint(self.contraintActivityIndicator_loadingLabel)
+            
             if (UIInterfaceOrientationIsLandscape(UIApplication.sharedApplication().statusBarOrientation)){
                 self.activityIndicatorView.center = CGPointMake(self.darkView.frame.size.width / 2.0, self.activityIndicatorView.frame.size.height / 2.0)
             }
