@@ -22,8 +22,8 @@ private let _singletoneInstance = CPSimpleHUD(center: CGPointMake(
 private let DARK_VIEW_HEIGHT:Float = 150
 private let DARK_VIEW_WIDTH:Float = 150
 
-private let ACTIVITY_INDICATOR_VIEW_HEIGHT:CGFloat = 65
-private let ACTIVITY_INDICATOR_VIEW_WIDTH:CGFloat = 65
+private let ACTIVITY_INDICATOR_VIEW_HEIGHT:Float = 65
+private let ACTIVITY_INDICATOR_VIEW_WIDTH:Float = 65
 
 private let NUMBER_OF_LINES_LOADING_LINES = 2
 
@@ -38,15 +38,19 @@ class CPSimpleHUD : UIView{
     */
     let loadingLabel:UILabel
     
+    private let activityIndicatorCenterInY:NSLayoutConstraint
+    
     private let DARK_VIEW_CODER_KEY = "DARK_VIEW_CODER_KEY"
     private let ACTIVITY_INDICATOR_VIEW_CODER_KEY = "ACTIVITY_INDICATOR_VIEW_CODER_KEY"
     private let LOADING_LABEL_CODER_KEY = "LOADING_LABEL_CODER_KEY"
+    private let ACTIVITY_INDICATOR_CENTER_Y_CODER_KEY = "ACTIVITY_INDICATOR_CENTER_Y_CODER_KEY"
     
 //MARK: - Init Methods
     required init(coder aDecoder: NSCoder) {
         self.darkView = aDecoder.decodeObjectForKey(DARK_VIEW_CODER_KEY) as UIView
         self.activityIndicatorView = aDecoder.decodeObjectForKey(ACTIVITY_INDICATOR_VIEW_CODER_KEY) as UIActivityIndicatorView
         self.loadingLabel = aDecoder.decodeObjectForKey(LOADING_LABEL_CODER_KEY) as UILabel
+        self.activityIndicatorCenterInY = aDecoder.decodeObjectForKey(ACTIVITY_INDICATOR_CENTER_Y_CODER_KEY) as NSLayoutConstraint
         
         super.init(coder: aDecoder)
         
@@ -67,8 +71,8 @@ class CPSimpleHUD : UIView{
         // create new dialog box view and component
         self.activityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: .WhiteLarge)
         self.activityIndicatorView.bounds = CGRect(origin: CGPointZero,
-            size: CGSizeMake(ACTIVITY_INDICATOR_VIEW_WIDTH,
-                ACTIVITY_INDICATOR_VIEW_HEIGHT)
+            size: CGSizeMake(CGFloat(ACTIVITY_INDICATOR_VIEW_WIDTH),
+                CGFloat(ACTIVITY_INDICATOR_VIEW_HEIGHT))
         )
         
         //We place the activity view in the center of the dark view
@@ -91,8 +95,25 @@ class CPSimpleHUD : UIView{
         self.loadingLabel.text = ""
         
         //We add the subviews
-        self.darkView.addSubview(self.loadingLabel)
+        //self.darkView.addSubview(self.loadingLabel)
         self.darkView.addSubview(self.activityIndicatorView)
+        
+        //self.loadingLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
+        self.activityIndicatorView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        
+        let viewsInDarkView = NSDictionary(objects: [self.loadingLabel,self.activityIndicatorView], forKeys: ["loadingLabel","activityIndicatorView"])
+        let metricsInDarkView = ["activityIndicatorViewWidth":NSNumber(float: ACTIVITY_INDICATOR_VIEW_WIDTH),
+                                 "activityIndicatorViewHeight":NSNumber(float: ACTIVITY_INDICATOR_VIEW_HEIGHT)] as NSDictionary
+        
+        self.darkView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:[activityIndicatorView(activityIndicatorViewWidth)]", options: NSLayoutFormatOptions(0), metrics: metricsInDarkView, views: viewsInDarkView))
+        self.darkView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:[activityIndicatorView(activityIndicatorViewHeight)]", options: NSLayoutFormatOptions(0), metrics: metricsInDarkView, views: viewsInDarkView))
+        
+        self.activityIndicatorCenterInY = NSLayoutConstraint(item:self.activityIndicatorView, attribute: .CenterY, relatedBy: .Equal, toItem: self.darkView, attribute: .CenterY, multiplier: 1.0, constant: 0)
+        let centerInX:NSLayoutConstraint = NSLayoutConstraint(item:self.activityIndicatorView, attribute: .CenterX, relatedBy: .Equal, toItem: self.darkView, attribute: .CenterX, multiplier: 1.0, constant: 0)
+        
+        self.darkView.addConstraint(centerInX)
+        self.darkView.addConstraint(self.activityIndicatorCenterInY)
+
         
         //Finally we call our super
         super.init(frame: CGRect(origin: CGPointZero, size: UIScreen.mainScreen().bounds.size))
@@ -171,6 +192,8 @@ class CPSimpleHUD : UIView{
         //We add the view in the windows
         keyWindow.addSubview(self)
         self.activityIndicatorView.startAnimating()
+        
+        self.activityIndicatorCenterInY.constant = 
         
         //If we have text we move the activity indicator
         let text:NSString! = self.loadingLabel.text;
