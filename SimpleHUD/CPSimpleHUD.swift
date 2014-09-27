@@ -11,7 +11,8 @@ import UIKit
 
 enum WaitingType: Int{
     case Unlimited
-    case SmallCubes
+    case SmallCubesLinear
+    case SmallCubesBorders
 }
 
 
@@ -60,10 +61,11 @@ class CPSimpleHUD : UIView{
     
 //MARK SmallCubes
     
-    private var listOfCubes:NSMutableArray?
+    private var pathOfCubes:NSMutableArray?
     private var timer:NSTimer?
     private var cubeAnimating:Int=0
     private var timerShouldInvalidate:Bool = false
+    private var cubesInX:Int=0
     
     
 //MARK: - Init Methods
@@ -177,7 +179,7 @@ class CPSimpleHUD : UIView{
         }
 
         switch waitingType{
-            case .SmallCubes:
+        case .SmallCubesLinear,.SmallCubesBorders:
                 self.setUpSmallCubes()
         default:
             
@@ -228,60 +230,98 @@ class CPSimpleHUD : UIView{
     func setUpSmallCubes()
     {
         let MARGIN = 5
-        let CUBE_SIZE = 15
+        let CUBE_SIZE = 25
         let DISTANCE_BETWEEN_CUBES = 2
         
-        let cubesInX = ((Int(self.darkView.frame.size.width) - Int(DISTANCE_BETWEEN_CUBES)))/(CUBE_SIZE + DISTANCE_BETWEEN_CUBES)
+        self.cubesInX = ((Int(self.darkView.frame.size.width) - Int(DISTANCE_BETWEEN_CUBES)))/(CUBE_SIZE + DISTANCE_BETWEEN_CUBES)
         let cubesInY = ((Int(self.darkView.frame.size.height) - Int(DISTANCE_BETWEEN_CUBES)))/(CUBE_SIZE + DISTANCE_BETWEEN_CUBES)
         
         var xPosition = MARGIN
         var yPosition = MARGIN
         var tag = 1
-        self.listOfCubes = NSMutableArray(capacity: cubesInX * cubesInY)
+        var listOfCubes = NSMutableArray(capacity: self.cubesInX * cubesInY)
+        
         for indexY in 1...cubesInY{
-            for index in 1...cubesInX{
+            for index in 1...self.cubesInX{
                 let cube = UIView(frame: CGRectMake(CGFloat(xPosition), CGFloat(yPosition), CGFloat(CUBE_SIZE), CGFloat(CUBE_SIZE)))
                 cube.tag = tag
-                cube.backgroundColor = self.darkView.backgroundColor
-                cube.alpha = 0.0
+                cube.backgroundColor = UIColor.clearColor()
                 tag++
                 
                 xPosition += DISTANCE_BETWEEN_CUBES + CUBE_SIZE
                 self.darkView.addSubview(cube)
                 
-                self.listOfCubes?.addObject(cube)
+                listOfCubes.addObject(cube)
             }
             yPosition += DISTANCE_BETWEEN_CUBES + CUBE_SIZE
             xPosition = MARGIN
         }
         
+        self.pathOfCubes = NSMutableArray();
+        switch(self.waitingMode){
+        case .SmallCubesBorders:
+            for index in 0...(cubesInX-1){
+                self.pathOfCubes?.addObject(listOfCubes[index])
+            }
+            for index in 2...(cubesInY-1){
+                self.pathOfCubes?.addObject(listOfCubes[(cubesInX * index) - 1])
+            }
+            for var index:Int = listOfCubes.count-1; (listOfCubes.count-1)-(cubesInX-1) <= index; index-- {
+                self.pathOfCubes?.addObject(listOfCubes[index])
+            }
+            for index in 2...(cubesInY-1){
+                self.pathOfCubes?.addObject(listOfCubes[(cubesInX * (cubesInY - index))])
+            }
+            
+        default:
+            self.pathOfCubes = listOfCubes
+        }
+        
+        
     }
 
 //MARK Timer Small Cubes
+    func cleanCubes(listOfCubes:NSArray){
+        for var index = 0; index < listOfCubes.count; ++index{
+            let view = listOfCubes[index] as UIView
+            view.backgroundColor = UIColor.clearColor()
+        }
+        self.cubeAnimating = 0
+    }
     func timerCubes(timer:NSTimer){
         
-        if let listOfCubes = self.listOfCubes
+        if var listOfCubes = self.pathOfCubes
         {
-            if (self.cubeAnimating > 0){
-                let previousView = listOfCubes[self.cubeAnimating - 1] as UIView
-                previousView.backgroundColor = self.darkView.backgroundColor
-                previousView.alpha = 0.3
+            if (self.cubeAnimating == listOfCubes.count) {
+                self.cleanCubes(listOfCubes)
             }
-            let currentView = listOfCubes[self.cubeAnimating] as UIView
-            currentView.backgroundColor = UIColor.whiteColor()
-            currentView.alpha = 1
-            
-            if (self.cubeAnimating == (listOfCubes.count-1)) {
-                for var index = 0; index < listOfCubes.count; ++index{
-                    let view = listOfCubes[index] as UIView
-                    view.alpha = 0
+            for var index:Int = self.cubeAnimating; 0 <= index ; --index{
+                
+                switch index{
+                case self.cubeAnimating:
+                    let cubeViewCurrent = listOfCubes[self.cubeAnimating] as UIView
+                    cubeViewCurrent.backgroundColor = UIColor.whiteColor()
+                    
+                case self.cubeAnimating - 1:
+                    let cubeViewPrevious = listOfCubes[self.cubeAnimating - 1] as UIView
+                    cubeViewPrevious.backgroundColor = UIColor(red: 209.0/255.0, green: 209.0/255.0, blue: 209.0/255.0, alpha: 1)
+                case self.cubeAnimating - 2:
+                    let cubeViewPrevious = listOfCubes[self.cubeAnimating - 2] as UIView
+                    cubeViewPrevious.backgroundColor = UIColor(red: 156.0/255.0, green: 156.0/255.0, blue: 156.0/255.0, alpha: 1)
+                case self.cubeAnimating - 3:
+                    let cubeViewPrevious = listOfCubes[self.cubeAnimating - 3] as UIView
+                    cubeViewPrevious.backgroundColor = UIColor(red: 96.0/255.0, green: 96.0/255.0, blue: 96.0/255.0, alpha: 1)
+                    
+                default:
+                    let cubeViewPreviousPrevious = listOfCubes[index] as UIView
+                    cubeViewPreviousPrevious.backgroundColor = UIColor.clearColor()
                 }
-                self.cubeAnimating = 0
             }
-            else{
-                self.cubeAnimating += 1
-            }
+            self.cubeAnimating += 1
+
             if self.timerShouldInvalidate{
+                self.cleanCubes(listOfCubes)
+
                 timer.invalidate()
             }
         }
@@ -318,10 +358,10 @@ class CPSimpleHUD : UIView{
         keyWindow.addSubview(self)
         
         switch self.waitingMode{
-            case .SmallCubes:
+            case .SmallCubesLinear,.SmallCubesBorders:
                 self.timerShouldInvalidate = false
                 self.cubeAnimating = 0
-                self.timer? = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: Selector("timerCubes:"), userInfo:nil , repeats: true)
+                self.timer? = NSTimer.scheduledTimerWithTimeInterval(0.08, target: self, selector: Selector("timerCubes:"), userInfo:nil , repeats: true)
             
 
             default:
@@ -358,7 +398,7 @@ class CPSimpleHUD : UIView{
     func hide()
     {
         switch self.waitingMode{
-        case .SmallCubes:
+        case .SmallCubesLinear,.SmallCubesBorders:
             self.timerShouldInvalidate = true
             NSNotificationCenter.defaultCenter().removeObserver(self, name:UIApplicationDidChangeStatusBarOrientationNotification , object: nil)
 
