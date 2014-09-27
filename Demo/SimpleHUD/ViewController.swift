@@ -35,6 +35,7 @@ class ViewController: UIViewController {
         
         let hud = CPSimpleHUD.shareWaitingView
         hud.loadingLabel.text = "Simple HUD"
+        hud.waitingMode = .SmallCubes
         hud.show()
         
 
