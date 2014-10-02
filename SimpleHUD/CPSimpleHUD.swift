@@ -38,11 +38,12 @@ class CPSimpleHUD : UIView{
         }
     }
     
-//MARK Unlimited
     /**
-        Dark view will be our canvas to draw and add subviews.
+    Dark view will be our canvas to draw and add subviews.
     */
     private var darkView:UIView
+    
+//MARK Unlimited
     private let activityIndicatorView:UIActivityIndicatorView
     /**
         Label shown when the activity indicator is running, if it's nil or the text it's empty nothing will show and the activity indicator will be placed in the middle of the dark view
@@ -60,6 +61,8 @@ class CPSimpleHUD : UIView{
     private let ACTIVITY_INDICATOR_LOADING_LABEL_CODER_KEY = "ACTIVITY_INDICATOR_LOADING_LABEL_CODER_KEY"
     
 //MARK SmallCubes
+    var cubeSize=20
+    
     
     private var pathOfCubes:NSMutableArray?
     private var timer:NSTimer?
@@ -187,8 +190,6 @@ class CPSimpleHUD : UIView{
             self
             
         }
-        
-
     }
     
     private func setUpWaitingTypeUnlimited(){
@@ -230,32 +231,36 @@ class CPSimpleHUD : UIView{
     func setUpSmallCubes()
     {
         let MARGIN = 5
-        let CUBE_SIZE = 25
         let DISTANCE_BETWEEN_CUBES = 2
         
-        self.cubesInX = ((Int(self.darkView.frame.size.width) - Int(DISTANCE_BETWEEN_CUBES)))/(CUBE_SIZE + DISTANCE_BETWEEN_CUBES)
-        let cubesInY = ((Int(self.darkView.frame.size.height) - Int(DISTANCE_BETWEEN_CUBES)))/(CUBE_SIZE + DISTANCE_BETWEEN_CUBES)
+        self.cubesInX = ((Int(self.darkView.frame.size.width) - Int(DISTANCE_BETWEEN_CUBES)))/(self.cubeSize + DISTANCE_BETWEEN_CUBES)
+        let cubesInY = ((Int(self.darkView.frame.size.height) - Int(DISTANCE_BETWEEN_CUBES)))/(self.cubeSize + DISTANCE_BETWEEN_CUBES)
         
         var xPosition = MARGIN
         var yPosition = MARGIN
         var tag = 1
         var listOfCubes = NSMutableArray(capacity: self.cubesInX * cubesInY)
         
+        let sizeCubeView = MARGIN + self.cubeSize * self.cubesInX + (self.cubesInX - 1) * DISTANCE_BETWEEN_CUBES + MARGIN;
+        let cubeView = UIView(frame: CGRect(origin: CGPointZero, size: CGSizeMake(CGFloat(sizeCubeView), CGFloat(sizeCubeView))));
         for indexY in 1...cubesInY{
             for index in 1...self.cubesInX{
-                let cube = UIView(frame: CGRectMake(CGFloat(xPosition), CGFloat(yPosition), CGFloat(CUBE_SIZE), CGFloat(CUBE_SIZE)))
+                let cube = UIView(frame: CGRectMake(CGFloat(xPosition), CGFloat(yPosition), CGFloat(self.cubeSize), CGFloat(self.cubeSize)))
                 cube.tag = tag
                 cube.backgroundColor = UIColor.clearColor()
                 tag++
                 
-                xPosition += DISTANCE_BETWEEN_CUBES + CUBE_SIZE
-                self.darkView.addSubview(cube)
+                xPosition += DISTANCE_BETWEEN_CUBES + self.cubeSize
+                cubeView.addSubview(cube)
                 
                 listOfCubes.addObject(cube)
             }
-            yPosition += DISTANCE_BETWEEN_CUBES + CUBE_SIZE
+            yPosition += DISTANCE_BETWEEN_CUBES + self.cubeSize
             xPosition = MARGIN
         }
+        cubeView.backgroundColor = UIColor.clearColor()
+        self.darkView.addSubview(cubeView);
+        cubeView.center = CGPointMake(self.darkView.frame.size.width/2, self.darkView.frame.size.height/2)
         
         self.pathOfCubes = NSMutableArray();
         switch(self.waitingMode){
@@ -280,7 +285,7 @@ class CPSimpleHUD : UIView{
         
     }
 
-//MARK Timer Small Cubes
+//MARK: Timer Small Cubes
     func cleanCubes(listOfCubes:NSArray){
         for var index = 0; index < listOfCubes.count; ++index{
             let view = listOfCubes[index] as UIView
