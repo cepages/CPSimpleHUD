@@ -35,7 +35,8 @@ class ViewController: UIViewController {
         
         let hud = CPSimpleHUD.shareWaitingView
         hud.loadingLabel.text = "Simple HUD"
-        hud.waitingMode = .SmallCubesLinear
+        hud.heightDarkViewContraint.constant = 200;
+        hud.widthDarkViewContraint.constant = 200;
         hud.show()
         
 

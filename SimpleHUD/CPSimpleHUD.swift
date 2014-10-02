@@ -41,7 +41,10 @@ class CPSimpleHUD : UIView{
     /**
     Dark view will be our canvas to draw and add subviews.
     */
-    private var darkView:UIView
+    let darkView:UIView
+    
+    let heightDarkViewContraint:NSLayoutConstraint
+    let widthDarkViewContraint:NSLayoutConstraint
     
 //MARK Unlimited
     private let activityIndicatorView:UIActivityIndicatorView
@@ -59,6 +62,9 @@ class CPSimpleHUD : UIView{
     private let ACTIVITY_INDICATOR_VIEW_CODER_KEY = "ACTIVITY_INDICATOR_VIEW_CODER_KEY"
     private let LOADING_LABEL_CODER_KEY = "LOADING_LABEL_CODER_KEY"
     private let ACTIVITY_INDICATOR_LOADING_LABEL_CODER_KEY = "ACTIVITY_INDICATOR_LOADING_LABEL_CODER_KEY"
+    private let HEIGHT_DARK_VIEW_CONTRAINT_CODER_KEY = "HEIGHT_DARK_VIEW_CONTRAINT_CODER_KEY"
+    private let WIDTH_DARK_VIEW_CONTRAINT_CODER_KEY = "WIDTH_DARK_VIEW_CONTRAINT_CODER_KEY"
+
     
 //MARK SmallCubes
     var cubeSize=20
@@ -77,6 +83,8 @@ class CPSimpleHUD : UIView{
         self.activityIndicatorView = aDecoder.decodeObjectForKey(ACTIVITY_INDICATOR_VIEW_CODER_KEY) as UIActivityIndicatorView
         self.loadingLabel = aDecoder.decodeObjectForKey(LOADING_LABEL_CODER_KEY) as UILabel
         self.contraintActivityIndicator_loadingLabel = aDecoder.decodeObjectForKey(ACTIVITY_INDICATOR_LOADING_LABEL_CODER_KEY) as NSLayoutConstraint
+        self.widthDarkViewContraint = aDecoder.decodeObjectForKey(WIDTH_DARK_VIEW_CONTRAINT_CODER_KEY) as NSLayoutConstraint
+        self.heightDarkViewContraint = aDecoder.decodeObjectForKey(HEIGHT_DARK_VIEW_CONTRAINT_CODER_KEY) as NSLayoutConstraint
         
         super.init(coder: aDecoder)
         
@@ -97,6 +105,9 @@ class CPSimpleHUD : UIView{
         )
         self.contraintActivityIndicator_loadingLabel = NSLayoutConstraint(item: self.activityIndicatorView, attribute: .Bottom, relatedBy: .Equal, toItem: self.loadingLabel, attribute: .Top, multiplier: 1.0, constant: 0)
         //Customization
+        
+        self.heightDarkViewContraint = NSLayoutConstraint(item: self.darkView, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1, constant: self.darkView.frame.size.height)
+        self.widthDarkViewContraint = NSLayoutConstraint(item: self.darkView, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1, constant: self.darkView.frame.size.width)
         
         //Finally we call our super
         super.init(frame: CGRect(origin: CGPointZero, size: UIScreen.mainScreen().bounds.size))
@@ -137,10 +148,8 @@ class CPSimpleHUD : UIView{
         self.addConstraint(contraintCenterX)
         self.addConstraint(contraintCenterY)
         
-        let views = NSDictionary(objects: [self.darkView], forKeys: ["darkView"])
-        let metrics = NSDictionary(objects: [NSNumber(float:DARK_VIEW_WIDTH),NSNumber(float:DARK_VIEW_HEIGHT)], forKeys: ["darkViewWidth","darkViewHeight"])
-        self.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:[darkView(darkViewWidth)]", options: NSLayoutFormatOptions(0), metrics: metrics, views: views))
-        self.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:[darkView(darkViewHeight)]", options: NSLayoutFormatOptions(0), metrics: metrics, views: views))
+        self.addConstraint(self.heightDarkViewContraint)
+        self.addConstraint(self.widthDarkViewContraint)
     }
     
     //Computed Property
@@ -343,6 +352,9 @@ class CPSimpleHUD : UIView{
         aCoder.encodeObject(self.darkView, forKey: DARK_VIEW_CODER_KEY)
         aCoder.encodeObject(self.activityIndicatorView, forKey: ACTIVITY_INDICATOR_VIEW_CODER_KEY)
         aCoder.encodeObject(self.loadingLabel, forKey: LOADING_LABEL_CODER_KEY)
+        aCoder.encodeObject(self.widthDarkViewContraint,forKey: WIDTH_DARK_VIEW_CONTRAINT_CODER_KEY)
+        aCoder.encodeObject(self.heightDarkViewContraint,forKey: HEIGHT_DARK_VIEW_CONTRAINT_CODER_KEY)
+        aCoder.encodeObject(self.contraintActivityIndicator_loadingLabel,forKey: ACTIVITY_INDICATOR_LOADING_LABEL_CODER_KEY)
         
         super.encodeWithCoder(aCoder)
     }
