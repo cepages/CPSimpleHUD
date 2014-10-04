@@ -238,7 +238,7 @@ class CPSimpleHUD : UIView{
     
     func setUpSmallCubes()
     {
-        let MARGIN = 5
+        let MARGIN = 5 as Int
         let DISTANCE_BETWEEN_CUBES = 2
         
         self.cubesInX = 6;
@@ -250,14 +250,17 @@ class CPSimpleHUD : UIView{
 //        self.cubesInX = ((Int(self.darkView.frame.size.width) - Int(DISTANCE_BETWEEN_CUBES)))/(self.cubeSize + DISTANCE_BETWEEN_CUBES)
 //        let cubesInY = ((Int(self.darkView.frame.size.height) - Int(DISTANCE_BETWEEN_CUBES)))/(self.cubeSize + DISTANCE_BETWEEN_CUBES)
 //        
-        var xPosition = MARGIN
-        var yPosition = MARGIN
+        var xPosition = 0
+        var yPosition = 0
         var tag = 1
         var listOfCubes = NSMutableArray(capacity: self.cubesInX * cubesInY)
         
-        let sizeCubeView = MARGIN + cubeSizeX * self.cubesInX + (self.cubesInX - 1) * DISTANCE_BETWEEN_CUBES + MARGIN;
+        let sizeCubeView = cubeSizeX * self.cubesInX + (self.cubesInX - 1) * DISTANCE_BETWEEN_CUBES
         let cubeView:UIView = UIView(frame: CGRect(origin: CGPointZero, size: CGSizeMake(CGFloat(sizeCubeView), CGFloat(sizeCubeView))));
         
+        let metricsCube:NSDictionary = ["distanceBetweenCubes":NSNumber(integer: DISTANCE_BETWEEN_CUBES)] as NSDictionary
+
+
         for indexY in 1...cubesInY{
             for index in 1...self.cubesInX{
                 let cube = UIView(frame: CGRectMake(CGFloat(xPosition), CGFloat(yPosition), CGFloat(cubeSizeX), CGFloat(cubeSizeY)))
@@ -266,17 +269,69 @@ class CPSimpleHUD : UIView{
                 tag++
                 
                 xPosition += DISTANCE_BETWEEN_CUBES + cubeSizeX
+                cubeView.setTranslatesAutoresizingMaskIntoConstraints(false)
                 cubeView.addSubview(cube)
                 
+
+                switch index{
+                case 1:
+                    
+                    let views:NSDictionary = ["cube":cube] as NSDictionary
+                    
+                    [cubeView .addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[cube]", options: NSLayoutFormatOptions(0), metrics: nil, views: views))]
+                    break;
+                case self.cubesInX:
+                    let previousCube:UIView = listOfCubes.objectAtIndex(listOfCubes.count - 1) as UIView
+                    
+                    let views:NSDictionary = ["cube":cube,"previousCube":previousCube] as NSDictionary
+                    [cubeView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:[previousCube]-distanceBetweenCubes-[cube]|", options: NSLayoutFormatOptions(0), metrics: metricsCube, views: views))]
+                
+                break;
+                default:
+                    let previousCube:UIView = listOfCubes.objectAtIndex(listOfCubes.count - 1) as UIView
+
+                    let views:NSDictionary = ["cube":cube,"previousCube":previousCube] as NSDictionary
+                    [cubeView .addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:[previousCube]-distanceBetweenCubes-[cube]", options: NSLayoutFormatOptions(0), metrics: metricsCube, views: views))]
+                }
+
+                switch indexY
+                {
+                case 1:
+                    let views:NSDictionary = ["cube":cube] as NSDictionary
+                    
+                    [cubeView .addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[cube]", options: NSLayoutFormatOptions(0), metrics: nil, views: views))]
+                case cubesInY:
+                    let previousCube:UIView = listOfCubes.objectAtIndex(listOfCubes.count - cubesInX) as UIView
+                    
+                    let views:NSDictionary = ["cube":cube,"previousCube":previousCube] as NSDictionary
+                    [cubeView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:[previousCube]-distanceBetweenCubes-[cube]|", options: NSLayoutFormatOptions(0), metrics: metricsCube, views: views))]
+                    
+                    break;
+                    
+                default:
+                    let previousCube:UIView = listOfCubes.objectAtIndex(listOfCubes.count - cubesInX) as UIView
+
+                    
+                    let views:NSDictionary = ["cube":cube,"previousCube":previousCube] as NSDictionary
+                    [cubeView .addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:[previousCube]-distanceBetweenCubes-[cube]", options: NSLayoutFormatOptions(0), metrics: metricsCube, views: views))]
+                }
                 listOfCubes.addObject(cube)
             }
             yPosition += DISTANCE_BETWEEN_CUBES + cubeSizeY
-            xPosition = MARGIN
+            xPosition = 0
         }
-        cubeView.backgroundColor = UIColor.clearColor()
+        cubeView.backgroundColor = UIColor.redColor()
         self.darkView.addSubview(cubeView);
+        cubeView.setTranslatesAutoresizingMaskIntoConstraints(false)
         
-        cubeView.center = CGPointMake(self.darkView.frame.size.width/2, self.darkView.frame.size.height/2)
+        let metrics:NSDictionary = ["margin":NSNumber(integer:MARGIN)] as NSDictionary
+        let views:NSDictionary = ["cubeview":cubeView] as NSDictionary
+        
+        [self.darkView .addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|-margin-[cubeview]-margin-|", options: NSLayoutFormatOptions(0), metrics: metrics, views: views))]
+        [self.darkView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-margin-[cubeview]-margin-|", options: NSLayoutFormatOptions(0), metrics: metrics, views: views))]
+        
+        [self.darkView .addConstraint(NSLayoutConstraint(item: cubeView, attribute: .CenterX, relatedBy: .Equal, toItem: self.darkView, attribute: .CenterX, multiplier: 1, constant: 0))]
+        [self.darkView .addConstraint(NSLayoutConstraint(item: cubeView, attribute: .CenterY, relatedBy: .Equal, toItem: self.darkView, attribute: .CenterY, multiplier: 1, constant: 0))]
         
         self.pathOfCubes = NSMutableArray();
         switch(self.waitingMode){
