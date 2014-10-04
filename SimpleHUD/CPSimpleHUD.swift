@@ -67,7 +67,6 @@ class CPSimpleHUD : UIView{
 
     
 //MARK SmallCubes
-    var cubeSize=20
     
     
     private var pathOfCubes:NSMutableArray?
@@ -242,33 +241,41 @@ class CPSimpleHUD : UIView{
         let MARGIN = 5
         let DISTANCE_BETWEEN_CUBES = 2
         
-        self.cubesInX = ((Int(self.darkView.frame.size.width) - Int(DISTANCE_BETWEEN_CUBES)))/(self.cubeSize + DISTANCE_BETWEEN_CUBES)
-        let cubesInY = ((Int(self.darkView.frame.size.height) - Int(DISTANCE_BETWEEN_CUBES)))/(self.cubeSize + DISTANCE_BETWEEN_CUBES)
+        self.cubesInX = 6;
+        let cubesInY = 6;
         
+        let cubeSizeX = (((Int(self.darkView.frame.size.width) - MARGIN * 2 - Int(DISTANCE_BETWEEN_CUBES))-(self.cubesInX * DISTANCE_BETWEEN_CUBES))/self.cubesInX)
+        let cubeSizeY = (((Int(self.darkView.frame.size.width) - MARGIN * 2 - Int(DISTANCE_BETWEEN_CUBES))-(cubesInY * DISTANCE_BETWEEN_CUBES))/cubesInY)
+
+//        self.cubesInX = ((Int(self.darkView.frame.size.width) - Int(DISTANCE_BETWEEN_CUBES)))/(self.cubeSize + DISTANCE_BETWEEN_CUBES)
+//        let cubesInY = ((Int(self.darkView.frame.size.height) - Int(DISTANCE_BETWEEN_CUBES)))/(self.cubeSize + DISTANCE_BETWEEN_CUBES)
+//        
         var xPosition = MARGIN
         var yPosition = MARGIN
         var tag = 1
         var listOfCubes = NSMutableArray(capacity: self.cubesInX * cubesInY)
         
-        let sizeCubeView = MARGIN + self.cubeSize * self.cubesInX + (self.cubesInX - 1) * DISTANCE_BETWEEN_CUBES + MARGIN;
-        let cubeView = UIView(frame: CGRect(origin: CGPointZero, size: CGSizeMake(CGFloat(sizeCubeView), CGFloat(sizeCubeView))));
+        let sizeCubeView = MARGIN + cubeSizeX * self.cubesInX + (self.cubesInX - 1) * DISTANCE_BETWEEN_CUBES + MARGIN;
+        let cubeView:UIView = UIView(frame: CGRect(origin: CGPointZero, size: CGSizeMake(CGFloat(sizeCubeView), CGFloat(sizeCubeView))));
+        
         for indexY in 1...cubesInY{
             for index in 1...self.cubesInX{
-                let cube = UIView(frame: CGRectMake(CGFloat(xPosition), CGFloat(yPosition), CGFloat(self.cubeSize), CGFloat(self.cubeSize)))
+                let cube = UIView(frame: CGRectMake(CGFloat(xPosition), CGFloat(yPosition), CGFloat(cubeSizeX), CGFloat(cubeSizeY)))
                 cube.tag = tag
                 cube.backgroundColor = UIColor.clearColor()
                 tag++
                 
-                xPosition += DISTANCE_BETWEEN_CUBES + self.cubeSize
+                xPosition += DISTANCE_BETWEEN_CUBES + cubeSizeX
                 cubeView.addSubview(cube)
                 
                 listOfCubes.addObject(cube)
             }
-            yPosition += DISTANCE_BETWEEN_CUBES + self.cubeSize
+            yPosition += DISTANCE_BETWEEN_CUBES + cubeSizeY
             xPosition = MARGIN
         }
         cubeView.backgroundColor = UIColor.clearColor()
         self.darkView.addSubview(cubeView);
+        
         cubeView.center = CGPointMake(self.darkView.frame.size.width/2, self.darkView.frame.size.height/2)
         
         self.pathOfCubes = NSMutableArray();
