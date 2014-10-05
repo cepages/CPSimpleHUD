@@ -73,7 +73,6 @@ class CPSimpleHUD : UIView{
     private var timer:NSTimer?
     private var cubeAnimating:Int=0
     private var timerShouldInvalidate:Bool = false
-    private var cubesInX:Int=0
     
     
 //MARK: - Init Methods
@@ -241,50 +240,54 @@ class CPSimpleHUD : UIView{
         let MARGIN = 5 as Int
         let DISTANCE_BETWEEN_CUBES = 2
         
-        self.cubesInX = 6;
+        let cubesInX = 6;
         let cubesInY = 6;
         
-        let cubeSizeX = (((Int(self.darkView.frame.size.width) - MARGIN * 2 - Int(DISTANCE_BETWEEN_CUBES))-(self.cubesInX * DISTANCE_BETWEEN_CUBES))/self.cubesInX)
+        let cubeSizeX = (((Int(self.darkView.frame.size.width) - MARGIN * 2 - Int(DISTANCE_BETWEEN_CUBES))-(cubesInX * DISTANCE_BETWEEN_CUBES))/cubesInX)
         let cubeSizeY = (((Int(self.darkView.frame.size.width) - MARGIN * 2 - Int(DISTANCE_BETWEEN_CUBES))-(cubesInY * DISTANCE_BETWEEN_CUBES))/cubesInY)
 
-//        self.cubesInX = ((Int(self.darkView.frame.size.width) - Int(DISTANCE_BETWEEN_CUBES)))/(self.cubeSize + DISTANCE_BETWEEN_CUBES)
-//        let cubesInY = ((Int(self.darkView.frame.size.height) - Int(DISTANCE_BETWEEN_CUBES)))/(self.cubeSize + DISTANCE_BETWEEN_CUBES)
-//        
         var xPosition = 0
         var yPosition = 0
         var tag = 1
-        var listOfCubes = NSMutableArray(capacity: self.cubesInX * cubesInY)
+        var listOfCubes = NSMutableArray(capacity: cubesInX * cubesInY)
         
-        let sizeCubeView = cubeSizeX * self.cubesInX + (self.cubesInX - 1) * DISTANCE_BETWEEN_CUBES
+        let sizeCubeView = cubeSizeX * cubesInX + (cubesInX - 1) * DISTANCE_BETWEEN_CUBES
         let cubeView:UIView = UIView(frame: CGRect(origin: CGPointZero, size: CGSizeMake(CGFloat(sizeCubeView), CGFloat(sizeCubeView))));
         
         let metricsCube:NSDictionary = ["distanceBetweenCubes":NSNumber(integer: DISTANCE_BETWEEN_CUBES)] as NSDictionary
 
 
         for indexY in 1...cubesInY{
-            for index in 1...self.cubesInX{
-                let cube = UIView(frame: CGRectMake(CGFloat(xPosition), CGFloat(yPosition), CGFloat(cubeSizeX), CGFloat(cubeSizeY)))
+            for index in 1...cubesInX{
+                let cube = UIView()
                 cube.tag = tag
                 cube.backgroundColor = UIColor.clearColor()
                 tag++
                 
                 xPosition += DISTANCE_BETWEEN_CUBES + cubeSizeX
-                cubeView.setTranslatesAutoresizingMaskIntoConstraints(false)
                 cubeView.addSubview(cube)
-                
+                cube.setTranslatesAutoresizingMaskIntoConstraints(false)
 
+                cube.setContentCompressionResistancePriority(0, forAxis: .Horizontal)
+                cube.setContentCompressionResistancePriority(0, forAxis: .Vertical)
+                cube.setContentHuggingPriority(1000, forAxis: .Horizontal)
+                cube.setContentHuggingPriority(1000, forAxis: .Vertical)
+                
+                
                 switch index{
                 case 1:
                     
                     let views:NSDictionary = ["cube":cube] as NSDictionary
                     
                     [cubeView .addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[cube]", options: NSLayoutFormatOptions(0), metrics: nil, views: views))]
+                    
                     break;
-                case self.cubesInX:
+                case cubesInX:
                     let previousCube:UIView = listOfCubes.objectAtIndex(listOfCubes.count - 1) as UIView
                     
                     let views:NSDictionary = ["cube":cube,"previousCube":previousCube] as NSDictionary
                     [cubeView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:[previousCube]-distanceBetweenCubes-[cube]|", options: NSLayoutFormatOptions(0), metrics: metricsCube, views: views))]
+                    [cubeView.addConstraint(NSLayoutConstraint(item: cube, attribute: .Width, relatedBy: .Equal, toItem: previousCube, attribute: .Width, multiplier: 1, constant: 0))];
                 
                 break;
                 default:
@@ -292,6 +295,7 @@ class CPSimpleHUD : UIView{
 
                     let views:NSDictionary = ["cube":cube,"previousCube":previousCube] as NSDictionary
                     [cubeView .addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:[previousCube]-distanceBetweenCubes-[cube]", options: NSLayoutFormatOptions(0), metrics: metricsCube, views: views))]
+                    [cubeView.addConstraint(NSLayoutConstraint(item: cube, attribute: .Width, relatedBy: .Equal, toItem: previousCube, attribute: .Width, multiplier: 1, constant: 0))];
                 }
 
                 switch indexY
@@ -300,11 +304,14 @@ class CPSimpleHUD : UIView{
                     let views:NSDictionary = ["cube":cube] as NSDictionary
                     
                     [cubeView .addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[cube]", options: NSLayoutFormatOptions(0), metrics: nil, views: views))]
+
+                    break;
                 case cubesInY:
                     let previousCube:UIView = listOfCubes.objectAtIndex(listOfCubes.count - cubesInX) as UIView
                     
                     let views:NSDictionary = ["cube":cube,"previousCube":previousCube] as NSDictionary
                     [cubeView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:[previousCube]-distanceBetweenCubes-[cube]|", options: NSLayoutFormatOptions(0), metrics: metricsCube, views: views))]
+                    [cubeView.addConstraint(NSLayoutConstraint(item: cube, attribute: .Height, relatedBy: .Equal, toItem: previousCube, attribute: .Height, multiplier: 1, constant: 0))];
                     
                     break;
                     
@@ -314,6 +321,7 @@ class CPSimpleHUD : UIView{
                     
                     let views:NSDictionary = ["cube":cube,"previousCube":previousCube] as NSDictionary
                     [cubeView .addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:[previousCube]-distanceBetweenCubes-[cube]", options: NSLayoutFormatOptions(0), metrics: metricsCube, views: views))]
+                    [cubeView.addConstraint(NSLayoutConstraint(item: cube, attribute: .Height, relatedBy: .Equal, toItem: previousCube, attribute: .Height, multiplier: 1, constant: 0))];
                 }
                 listOfCubes.addObject(cube)
             }
