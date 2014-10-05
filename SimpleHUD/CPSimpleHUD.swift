@@ -41,7 +41,10 @@ class CPSimpleHUD : UIView{
     /**
     Dark view will be our canvas to draw and add subviews.
     */
-    private var darkView:UIView
+    let darkView:UIView
+    
+    let heightDarkViewContraint:NSLayoutConstraint
+    let widthDarkViewContraint:NSLayoutConstraint
     
 //MARK Unlimited
     private let activityIndicatorView:UIActivityIndicatorView
@@ -59,16 +62,17 @@ class CPSimpleHUD : UIView{
     private let ACTIVITY_INDICATOR_VIEW_CODER_KEY = "ACTIVITY_INDICATOR_VIEW_CODER_KEY"
     private let LOADING_LABEL_CODER_KEY = "LOADING_LABEL_CODER_KEY"
     private let ACTIVITY_INDICATOR_LOADING_LABEL_CODER_KEY = "ACTIVITY_INDICATOR_LOADING_LABEL_CODER_KEY"
+    private let HEIGHT_DARK_VIEW_CONTRAINT_CODER_KEY = "HEIGHT_DARK_VIEW_CONTRAINT_CODER_KEY"
+    private let WIDTH_DARK_VIEW_CONTRAINT_CODER_KEY = "WIDTH_DARK_VIEW_CONTRAINT_CODER_KEY"
+
     
 //MARK SmallCubes
-    var cubeSize=20
     
     
     private var pathOfCubes:NSMutableArray?
     private var timer:NSTimer?
     private var cubeAnimating:Int=0
     private var timerShouldInvalidate:Bool = false
-    private var cubesInX:Int=0
     
     
 //MARK: - Init Methods
@@ -77,6 +81,8 @@ class CPSimpleHUD : UIView{
         self.activityIndicatorView = aDecoder.decodeObjectForKey(ACTIVITY_INDICATOR_VIEW_CODER_KEY) as UIActivityIndicatorView
         self.loadingLabel = aDecoder.decodeObjectForKey(LOADING_LABEL_CODER_KEY) as UILabel
         self.contraintActivityIndicator_loadingLabel = aDecoder.decodeObjectForKey(ACTIVITY_INDICATOR_LOADING_LABEL_CODER_KEY) as NSLayoutConstraint
+        self.widthDarkViewContraint = aDecoder.decodeObjectForKey(WIDTH_DARK_VIEW_CONTRAINT_CODER_KEY) as NSLayoutConstraint
+        self.heightDarkViewContraint = aDecoder.decodeObjectForKey(HEIGHT_DARK_VIEW_CONTRAINT_CODER_KEY) as NSLayoutConstraint
         
         super.init(coder: aDecoder)
         
@@ -97,6 +103,9 @@ class CPSimpleHUD : UIView{
         )
         self.contraintActivityIndicator_loadingLabel = NSLayoutConstraint(item: self.activityIndicatorView, attribute: .Bottom, relatedBy: .Equal, toItem: self.loadingLabel, attribute: .Top, multiplier: 1.0, constant: 0)
         //Customization
+        
+        self.heightDarkViewContraint = NSLayoutConstraint(item: self.darkView, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1, constant: self.darkView.frame.size.height)
+        self.widthDarkViewContraint = NSLayoutConstraint(item: self.darkView, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1, constant: self.darkView.frame.size.width)
         
         //Finally we call our super
         super.init(frame: CGRect(origin: CGPointZero, size: UIScreen.mainScreen().bounds.size))
@@ -137,10 +146,8 @@ class CPSimpleHUD : UIView{
         self.addConstraint(contraintCenterX)
         self.addConstraint(contraintCenterY)
         
-        let views = NSDictionary(objects: [self.darkView], forKeys: ["darkView"])
-        let metrics = NSDictionary(objects: [NSNumber(float:DARK_VIEW_WIDTH),NSNumber(float:DARK_VIEW_HEIGHT)], forKeys: ["darkViewWidth","darkViewHeight"])
-        self.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:[darkView(darkViewWidth)]", options: NSLayoutFormatOptions(0), metrics: metrics, views: views))
-        self.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:[darkView(darkViewHeight)]", options: NSLayoutFormatOptions(0), metrics: metrics, views: views))
+        self.addConstraint(self.heightDarkViewContraint)
+        self.addConstraint(self.widthDarkViewContraint)
     }
     
     //Computed Property
@@ -230,37 +237,109 @@ class CPSimpleHUD : UIView{
     
     func setUpSmallCubes()
     {
-        let MARGIN = 5
+        let MARGIN = 5 as Int
         let DISTANCE_BETWEEN_CUBES = 2
         
-        self.cubesInX = ((Int(self.darkView.frame.size.width) - Int(DISTANCE_BETWEEN_CUBES)))/(self.cubeSize + DISTANCE_BETWEEN_CUBES)
-        let cubesInY = ((Int(self.darkView.frame.size.height) - Int(DISTANCE_BETWEEN_CUBES)))/(self.cubeSize + DISTANCE_BETWEEN_CUBES)
+        let cubesInX = 6;
+        let cubesInY = 6;
         
-        var xPosition = MARGIN
-        var yPosition = MARGIN
+        let cubeSizeX = (((Int(self.darkView.frame.size.width) - MARGIN * 2 - Int(DISTANCE_BETWEEN_CUBES))-(cubesInX * DISTANCE_BETWEEN_CUBES))/cubesInX)
+        let cubeSizeY = (((Int(self.darkView.frame.size.width) - MARGIN * 2 - Int(DISTANCE_BETWEEN_CUBES))-(cubesInY * DISTANCE_BETWEEN_CUBES))/cubesInY)
+
+        var xPosition = 0
+        var yPosition = 0
         var tag = 1
-        var listOfCubes = NSMutableArray(capacity: self.cubesInX * cubesInY)
+        var listOfCubes = NSMutableArray(capacity: cubesInX * cubesInY)
         
-        let sizeCubeView = MARGIN + self.cubeSize * self.cubesInX + (self.cubesInX - 1) * DISTANCE_BETWEEN_CUBES + MARGIN;
-        let cubeView = UIView(frame: CGRect(origin: CGPointZero, size: CGSizeMake(CGFloat(sizeCubeView), CGFloat(sizeCubeView))));
+        let sizeCubeView = cubeSizeX * cubesInX + (cubesInX - 1) * DISTANCE_BETWEEN_CUBES
+        let cubeView:UIView = UIView(frame: CGRect(origin: CGPointZero, size: CGSizeMake(CGFloat(sizeCubeView), CGFloat(sizeCubeView))));
+        
+        let metricsCube:NSDictionary = ["distanceBetweenCubes":NSNumber(integer: DISTANCE_BETWEEN_CUBES)] as NSDictionary
+
+
         for indexY in 1...cubesInY{
-            for index in 1...self.cubesInX{
-                let cube = UIView(frame: CGRectMake(CGFloat(xPosition), CGFloat(yPosition), CGFloat(self.cubeSize), CGFloat(self.cubeSize)))
+            for index in 1...cubesInX{
+                let cube = UIView()
                 cube.tag = tag
                 cube.backgroundColor = UIColor.clearColor()
                 tag++
                 
-                xPosition += DISTANCE_BETWEEN_CUBES + self.cubeSize
+                xPosition += DISTANCE_BETWEEN_CUBES + cubeSizeX
                 cubeView.addSubview(cube)
+                cube.setTranslatesAutoresizingMaskIntoConstraints(false)
+
+                cube.setContentCompressionResistancePriority(0, forAxis: .Horizontal)
+                cube.setContentCompressionResistancePriority(0, forAxis: .Vertical)
+                cube.setContentHuggingPriority(1000, forAxis: .Horizontal)
+                cube.setContentHuggingPriority(1000, forAxis: .Vertical)
                 
+                
+                switch index{
+                case 1:
+                    
+                    let views:NSDictionary = ["cube":cube] as NSDictionary
+                    
+                    [cubeView .addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[cube]", options: NSLayoutFormatOptions(0), metrics: nil, views: views))]
+                    
+                    break;
+                case cubesInX:
+                    let previousCube:UIView = listOfCubes.objectAtIndex(listOfCubes.count - 1) as UIView
+                    
+                    let views:NSDictionary = ["cube":cube,"previousCube":previousCube] as NSDictionary
+                    [cubeView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:[previousCube]-distanceBetweenCubes-[cube]|", options: NSLayoutFormatOptions(0), metrics: metricsCube, views: views))]
+                    [cubeView.addConstraint(NSLayoutConstraint(item: cube, attribute: .Width, relatedBy: .Equal, toItem: previousCube, attribute: .Width, multiplier: 1, constant: 0))];
+                
+                break;
+                default:
+                    let previousCube:UIView = listOfCubes.objectAtIndex(listOfCubes.count - 1) as UIView
+
+                    let views:NSDictionary = ["cube":cube,"previousCube":previousCube] as NSDictionary
+                    [cubeView .addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:[previousCube]-distanceBetweenCubes-[cube]", options: NSLayoutFormatOptions(0), metrics: metricsCube, views: views))]
+                    [cubeView.addConstraint(NSLayoutConstraint(item: cube, attribute: .Width, relatedBy: .Equal, toItem: previousCube, attribute: .Width, multiplier: 1, constant: 0))];
+                }
+
+                switch indexY
+                {
+                case 1:
+                    let views:NSDictionary = ["cube":cube] as NSDictionary
+                    
+                    [cubeView .addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[cube]", options: NSLayoutFormatOptions(0), metrics: nil, views: views))]
+
+                    break;
+                case cubesInY:
+                    let previousCube:UIView = listOfCubes.objectAtIndex(listOfCubes.count - cubesInX) as UIView
+                    
+                    let views:NSDictionary = ["cube":cube,"previousCube":previousCube] as NSDictionary
+                    [cubeView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:[previousCube]-distanceBetweenCubes-[cube]|", options: NSLayoutFormatOptions(0), metrics: metricsCube, views: views))]
+                    [cubeView.addConstraint(NSLayoutConstraint(item: cube, attribute: .Height, relatedBy: .Equal, toItem: previousCube, attribute: .Height, multiplier: 1, constant: 0))];
+                    
+                    break;
+                    
+                default:
+                    let previousCube:UIView = listOfCubes.objectAtIndex(listOfCubes.count - cubesInX) as UIView
+
+                    
+                    let views:NSDictionary = ["cube":cube,"previousCube":previousCube] as NSDictionary
+                    [cubeView .addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:[previousCube]-distanceBetweenCubes-[cube]", options: NSLayoutFormatOptions(0), metrics: metricsCube, views: views))]
+                    [cubeView.addConstraint(NSLayoutConstraint(item: cube, attribute: .Height, relatedBy: .Equal, toItem: previousCube, attribute: .Height, multiplier: 1, constant: 0))];
+                }
                 listOfCubes.addObject(cube)
             }
-            yPosition += DISTANCE_BETWEEN_CUBES + self.cubeSize
-            xPosition = MARGIN
+            yPosition += DISTANCE_BETWEEN_CUBES + cubeSizeY
+            xPosition = 0
         }
         cubeView.backgroundColor = UIColor.clearColor()
         self.darkView.addSubview(cubeView);
-        cubeView.center = CGPointMake(self.darkView.frame.size.width/2, self.darkView.frame.size.height/2)
+        cubeView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        
+        let metrics:NSDictionary = ["margin":NSNumber(integer:MARGIN)] as NSDictionary
+        let views:NSDictionary = ["cubeview":cubeView] as NSDictionary
+        
+        [self.darkView .addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|-margin-[cubeview]-margin-|", options: NSLayoutFormatOptions(0), metrics: metrics, views: views))]
+        [self.darkView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-margin-[cubeview]-margin-|", options: NSLayoutFormatOptions(0), metrics: metrics, views: views))]
+        
+        [self.darkView .addConstraint(NSLayoutConstraint(item: cubeView, attribute: .CenterX, relatedBy: .Equal, toItem: self.darkView, attribute: .CenterX, multiplier: 1, constant: 0))]
+        [self.darkView .addConstraint(NSLayoutConstraint(item: cubeView, attribute: .CenterY, relatedBy: .Equal, toItem: self.darkView, attribute: .CenterY, multiplier: 1, constant: 0))]
         
         self.pathOfCubes = NSMutableArray();
         switch(self.waitingMode){
@@ -343,6 +422,9 @@ class CPSimpleHUD : UIView{
         aCoder.encodeObject(self.darkView, forKey: DARK_VIEW_CODER_KEY)
         aCoder.encodeObject(self.activityIndicatorView, forKey: ACTIVITY_INDICATOR_VIEW_CODER_KEY)
         aCoder.encodeObject(self.loadingLabel, forKey: LOADING_LABEL_CODER_KEY)
+        aCoder.encodeObject(self.widthDarkViewContraint,forKey: WIDTH_DARK_VIEW_CONTRAINT_CODER_KEY)
+        aCoder.encodeObject(self.heightDarkViewContraint,forKey: HEIGHT_DARK_VIEW_CONTRAINT_CODER_KEY)
+        aCoder.encodeObject(self.contraintActivityIndicator_loadingLabel,forKey: ACTIVITY_INDICATOR_LOADING_LABEL_CODER_KEY)
         
         super.encodeWithCoder(aCoder)
     }
