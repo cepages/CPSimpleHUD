@@ -328,7 +328,7 @@ class CPSimpleHUD : UIView{
             yPosition += DISTANCE_BETWEEN_CUBES + cubeSizeY
             xPosition = 0
         }
-        cubeView.backgroundColor = UIColor.redColor()
+        cubeView.backgroundColor = UIColor.clearColor()
         self.darkView.addSubview(cubeView);
         cubeView.setTranslatesAutoresizingMaskIntoConstraints(false)
         
