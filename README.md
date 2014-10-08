@@ -18,13 +18,19 @@ hud.waitingMode = .Unlimited
 
 - SmallCubesLinear
 
-To set SmallCubesLinear: ```hud.waitingMode = .SmallCubesLinear``` 
+To set SmallCubesLinear: 
 
-![hudborder](https://cloud.githubusercontent.com/assets/5259830/4565408/95b07658-4f1f-11e4-9515-d684918963d6.gif)
+```hud.waitingMode = .SmallCubesLinear```
+
+![hud](https://cloud.githubusercontent.com/assets/5259830/4565453/ec9cc994-4f1f-11e4-9e39-982cc67e6afa.gif)
 
 - SmallCubesBorders
 
-To set SmallCubesLinear: ```hud.waitingMode = .SmallCubesBorders``` 
+To set SmallCubesLinear: 
+
+```hud.waitingMode = .SmallCubesBorders``` 
+
+![hudborder](https://cloud.githubusercontent.com/assets/5259830/4565408/95b07658-4f1f-11e4-9515-d684918963d6.gif)
 
 
 ### How use it ###
@@ -39,6 +45,10 @@ CPSimpleHUD.shareWaitingView.hide()
 
 The dark view in the background and the label are customisable.
 
+## Autolayout
+
+You can change the size of the darkview and as a result the interior cubes will change.
+![hudbordersmall](https://cloud.githubusercontent.com/assets/5259830/4565469/2b6a3d00-4f20-11e4-988d-ba1c42846b02.gif)
 
 ### How do I get set up? ###
 
