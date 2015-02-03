@@ -173,7 +173,7 @@ class CPSimpleHUD : UIView{
     
 //MARK: - Notification Methods
     
-    private func orientationHasChanged(notification:NSNotification)
+    @objc private func orientationHasChanged(notification:NSNotification)
     {
         self.frame = CGRect(origin: CGPointZero, size: UIScreen.mainScreen().bounds.size)
         let center = CGPointMake(UIScreen.mainScreen().bounds.size.width/2, UIScreen.mainScreen().bounds.size.height/2)
@@ -448,46 +448,46 @@ class CPSimpleHUD : UIView{
         let orientation:UIInterfaceOrientation = UIApplication.sharedApplication().statusBarOrientation;
         
         switch orientation{
-            case .LandscapeLeft:
-                self.darkView.transform = CGAffineTransformMakeRotation(CGFloat(3 * M_PI_2))
-            case .LandscapeRight:
-                self.darkView.transform = CGAffineTransformMakeRotation(CGFloat(M_PI_2))
-            case .PortraitUpsideDown:
-                self.darkView.transform = CGAffineTransformMakeRotation(CGFloat(M_PI))
-            default:
-                self.darkView.transform = CGAffineTransformIdentity;
+        case .LandscapeLeft:
+            self.darkView.transform = CGAffineTransformMakeRotation(CGFloat(3 * M_PI_2))
+        case .LandscapeRight:
+            self.darkView.transform = CGAffineTransformMakeRotation(CGFloat(M_PI_2))
+        case .PortraitUpsideDown:
+            self.darkView.transform = CGAffineTransformMakeRotation(CGFloat(M_PI))
+        default:
+            self.darkView.transform = CGAffineTransformIdentity;
         }
         
         switch self.waitingMode{
-            case .SmallCubesLinear,.SmallCubesBorders:
-                self.timerShouldInvalidate = false
-                self.cubeAnimating = 0
-                self.timer? = NSTimer.scheduledTimerWithTimeInterval(0.08, target: self, selector: Selector("timerCubes:"), userInfo:nil , repeats: true)
+        case .SmallCubesLinear,.SmallCubesBorders:
+            self.timerShouldInvalidate = false
+            self.cubeAnimating = 0
+            self.timer? = NSTimer.scheduledTimerWithTimeInterval(0.08, target: self, selector: Selector("timerCubes:"), userInfo:nil , repeats: true)
             
-
-            default:
-                self.activityIndicatorView.startAnimating()
-                self.darkView.removeConstraint(self.contraintActivityIndicator_loadingLabel)
+            
+        default:
+            self.activityIndicatorView.startAnimating()
+            self.darkView.removeConstraint(self.contraintActivityIndicator_loadingLabel)
+            
+            
+            //If we have text we move the activity indicator
+            let text:NSString! = self.loadingLabel.text;
+            if  (text != nil && text.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) == 0) {
+                self.contraintActivityIndicator_loadingLabel = NSLayoutConstraint(item:self.activityIndicatorView, attribute: .CenterY, relatedBy: .Equal, toItem: self.darkView, attribute: .CenterY, multiplier: 1.0, constant: 0)
+                self.darkView.addConstraint(self.contraintActivityIndicator_loadingLabel)
+            }
+            else{
+                self.contraintActivityIndicator_loadingLabel = NSLayoutConstraint(item: self.activityIndicatorView, attribute: .Bottom, relatedBy: .Equal, toItem: self.loadingLabel, attribute: .Top, multiplier: 1.0, constant: 0)
                 
+                self.darkView.addConstraint(self.contraintActivityIndicator_loadingLabel)
                 
-                //If we have text we move the activity indicator
-                let text:NSString! = self.loadingLabel.text;
-                if  (text != nil && text.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) == 0) {
-                    self.contraintActivityIndicator_loadingLabel = NSLayoutConstraint(item:self.activityIndicatorView, attribute: .CenterY, relatedBy: .Equal, toItem: self.darkView, attribute: .CenterY, multiplier: 1.0, constant: 0)
-                    self.darkView.addConstraint(self.contraintActivityIndicator_loadingLabel)
+                if (UIInterfaceOrientationIsLandscape(UIApplication.sharedApplication().statusBarOrientation)){
+                    self.activityIndicatorView.center = CGPointMake(self.darkView.frame.size.width / 2.0, self.activityIndicatorView.frame.size.height / 2.0)
                 }
                 else{
-                    self.contraintActivityIndicator_loadingLabel = NSLayoutConstraint(item: self.activityIndicatorView, attribute: .Bottom, relatedBy: .Equal, toItem: self.loadingLabel, attribute: .Top, multiplier: 1.0, constant: 0)
-                    
-                    self.darkView.addConstraint(self.contraintActivityIndicator_loadingLabel)
-                    
-                    if (UIInterfaceOrientationIsLandscape(UIApplication.sharedApplication().statusBarOrientation)){
-                        self.activityIndicatorView.center = CGPointMake(self.darkView.frame.size.width / 2.0, self.activityIndicatorView.frame.size.height / 2.0)
-                    }
-                    else{
-                        self.activityIndicatorView.center = CGPointMake(self.darkView.frame.size.width / 2.0, self.activityIndicatorView.frame.size.height / 2.0)
-                    }
+                    self.activityIndicatorView.center = CGPointMake(self.darkView.frame.size.width / 2.0, self.activityIndicatorView.frame.size.height / 2.0)
                 }
+            }
         }
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("orientationHasChanged:"), name: UIApplicationDidChangeStatusBarOrientationNotification, object: nil)
