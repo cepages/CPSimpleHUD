@@ -173,7 +173,7 @@ class CPSimpleHUD : UIView{
     
 //MARK: - Notification Methods
     
-    private func orientationHasChanged(notification:NSNotification)
+    @objc private func orientationHasChanged(notification:NSNotification)
     {
         self.frame = CGRect(origin: CGPointZero, size: UIScreen.mainScreen().bounds.size)
         let center = CGPointMake(UIScreen.mainScreen().bounds.size.width/2, UIScreen.mainScreen().bounds.size.height/2)
