@@ -439,10 +439,24 @@ class CPSimpleHUD : UIView{
         self.darkView.center = center
         
         //We get the window
-        let keyWindow:UIWindow = UIApplication.sharedApplication().keyWindow
+        let keyWindow:UIWindow = UIApplication.sharedApplication().keyWindow!
         
         //We add the view in the windows
         keyWindow.addSubview(self)
+        
+        var transform:CGAffineTransform = CGAffineTransformIdentity
+        let orientation:UIInterfaceOrientation = UIApplication.sharedApplication().statusBarOrientation;
+        
+        switch orientation{
+            case .LandscapeLeft:
+                self.darkView.transform = CGAffineTransformMakeRotation(CGFloat(3 * M_PI_2))
+            case .LandscapeRight:
+                self.darkView.transform = CGAffineTransformMakeRotation(CGFloat(M_PI_2))
+            case .PortraitUpsideDown:
+                self.darkView.transform = CGAffineTransformMakeRotation(CGFloat(M_PI))
+            default:
+                self.darkView.transform = CGAffineTransformIdentity;
+        }
         
         switch self.waitingMode{
             case .SmallCubesLinear,.SmallCubesBorders:
@@ -494,6 +508,8 @@ class CPSimpleHUD : UIView{
 
         }
         self.removeFromSuperview()
+        
+        self.loadingLabel.text = nil;
     }
     
     override func intrinsicContentSize() -> CGSize {
