@@ -439,7 +439,7 @@ class CPSimpleHUD : UIView{
         self.darkView.center = center
         
         //We get the window
-        let keyWindow:UIWindow = UIApplication.sharedApplication().keyWindow
+        let keyWindow:UIWindow = UIApplication.sharedApplication().keyWindow!
         
         //We add the view in the windows
         keyWindow.addSubview(self)
