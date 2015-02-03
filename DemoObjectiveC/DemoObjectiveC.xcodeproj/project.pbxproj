@@ -14,6 +14,7 @@
 		5767C5FC1A8167BA003BC821 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5767C5FB1A8167BA003BC821 /* Images.xcassets */; };
 		5767C5FF1A8167BA003BC821 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5767C5FD1A8167BA003BC821 /* LaunchScreen.xib */; };
 		5767C60B1A8167BA003BC821 /* DemoObjectiveCTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 5767C60A1A8167BA003BC821 /* DemoObjectiveCTests.m */; };
+		5767C6171A81685A003BC821 /* CPSimpleHUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5767C6161A81685A003BC821 /* CPSimpleHUD.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,6 +41,8 @@
 		5767C6041A8167BA003BC821 /* DemoObjectiveCTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DemoObjectiveCTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5767C6091A8167BA003BC821 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5767C60A1A8167BA003BC821 /* DemoObjectiveCTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DemoObjectiveCTests.m; sourceTree = "<group>"; };
+		5767C6151A816859003BC821 /* DemoObjectiveC-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "DemoObjectiveC-Bridging-Header.h"; sourceTree = "<group>"; };
+		5767C6161A81685A003BC821 /* CPSimpleHUD.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CPSimpleHUD.swift; path = ../../../SimpleHUD/CPSimpleHUD.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,6 +84,7 @@
 		5767C5ED1A8167BA003BC821 /* DemoObjectiveC */ = {
 			isa = PBXGroup;
 			children = (
+				5767C6141A816808003BC821 /* SimpleHUD */,
 				5767C5F21A8167BA003BC821 /* AppDelegate.h */,
 				5767C5F31A8167BA003BC821 /* AppDelegate.m */,
 				5767C5F51A8167BA003BC821 /* ViewController.h */,
@@ -117,6 +121,15 @@
 				5767C6091A8167BA003BC821 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		5767C6141A816808003BC821 /* SimpleHUD */ = {
+			isa = PBXGroup;
+			children = (
+				5767C6161A81685A003BC821 /* CPSimpleHUD.swift */,
+				5767C6151A816859003BC821 /* DemoObjectiveC-Bridging-Header.h */,
+			);
+			path = SimpleHUD;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -221,6 +234,7 @@
 			files = (
 				5767C5F71A8167BA003BC821 /* ViewController.m in Sources */,
 				5767C5F41A8167BA003BC821 /* AppDelegate.m in Sources */,
+				5767C6171A81685A003BC821 /* CPSimpleHUD.swift in Sources */,
 				5767C5F11A8167BA003BC821 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -345,9 +359,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = DemoObjectiveC/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "DemoObjectiveC/SimpleHUD/DemoObjectiveC-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
@@ -355,9 +372,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = DemoObjectiveC/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "DemoObjectiveC/SimpleHUD/DemoObjectiveC-Bridging-Header.h";
 			};
 			name = Release;
 		};
