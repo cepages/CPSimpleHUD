@@ -173,7 +173,7 @@ class CPSimpleHUD : UIView{
     
 //MARK: - Notification Methods
     
-    @objc private func orientationHasChanged(notification:NSNotification)
+    dynamic private func orientationHasChanged(notification:NSNotification)
     {
         self.frame = CGRect(origin: CGPointZero, size: UIScreen.mainScreen().bounds.size)
         let center = CGPointMake(UIScreen.mainScreen().bounds.size.width/2, UIScreen.mainScreen().bounds.size.height/2)
@@ -444,20 +444,6 @@ class CPSimpleHUD : UIView{
         //We add the view in the windows
         keyWindow.addSubview(self)
         
-        var transform:CGAffineTransform = CGAffineTransformIdentity
-        let orientation:UIInterfaceOrientation = UIApplication.sharedApplication().statusBarOrientation;
-        
-        switch orientation{
-        case .LandscapeLeft:
-            self.darkView.transform = CGAffineTransformMakeRotation(CGFloat(3 * M_PI_2))
-        case .LandscapeRight:
-            self.darkView.transform = CGAffineTransformMakeRotation(CGFloat(M_PI_2))
-        case .PortraitUpsideDown:
-            self.darkView.transform = CGAffineTransformMakeRotation(CGFloat(M_PI))
-        default:
-            self.darkView.transform = CGAffineTransformIdentity;
-        }
-        
         switch self.waitingMode{
         case .SmallCubesLinear,.SmallCubesBorders:
             self.timerShouldInvalidate = false
@@ -498,6 +484,7 @@ class CPSimpleHUD : UIView{
     */
     func hide()
     {
+        
         switch self.waitingMode{
         case .SmallCubesLinear,.SmallCubesBorders:
             self.timerShouldInvalidate = true
