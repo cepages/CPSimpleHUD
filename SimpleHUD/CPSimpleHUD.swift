@@ -487,6 +487,8 @@ class CPSimpleHUD : UIView{
         switch self.waitingMode{
         case .SmallCubesLinear,.SmallCubesBorders:
             self.timerShouldInvalidate = true
+            self.loadingLabel.text = ""
+
             NSNotificationCenter.defaultCenter().removeObserver(self, name:UIApplicationDidChangeStatusBarOrientationNotification , object: nil)
 
         default:
