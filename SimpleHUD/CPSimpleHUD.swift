@@ -510,6 +510,8 @@ class CPSimpleHUD : UIView{
 
         }
         self.removeFromSuperview()
+        
+        self.loadingLabel.text = nil;
     }
     
     override func intrinsicContentSize() -> CGSize {
