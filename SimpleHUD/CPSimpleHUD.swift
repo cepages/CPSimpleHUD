@@ -9,11 +9,11 @@
 import Foundation
 import UIKit
 
-enum WaitingType: Int{
-    case Unlimited
-    case SmallCubesLinear
-    case SmallCubesBorders
-}
+//enum WaitingType: Int{
+//    case Unlimited
+//    case SmallCubesLinear
+//    case SmallCubesBorders
+//}
 
 
 private let _singletoneInstance = CPSimpleHUD(center: CGPointMake(
