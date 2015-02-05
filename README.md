@@ -14,7 +14,8 @@ Default mode, but to set Unlimited again:
 ``` 
 
 
-![HUD.gif](https://bitbucket.org/repo/GAA9rq/images/3304417787-HUD.gif)
+![HUD.gif]![hudbordersmall](https://cloud.githubusercontent.com/assets/5259830/6068505/80c2c17a-ad74-11e4-9e98-e7431637a573.gif)
+
 
 - SmallCubesLinear
 
