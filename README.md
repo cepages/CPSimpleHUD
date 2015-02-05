@@ -61,11 +61,27 @@ You can change the autolayout rules of the darkview and as a result the interior
 
 ![hudbordersmall](https://cloud.githubusercontent.com/assets/5259830/4565469/2b6a3d00-4f20-11e4-988d-ba1c42846b02.gif)
 
-### How do I get set up? ###
+### How can I add it to my project? ###
 
 Frameworks required:
 
 * Foundation.framework
 * UIKit.framework
 
-Just copy the CPSimpleHUD.swift file in your project.
+If you're gonna use it in swift code, just copy the CPSimpleHUD.swift file in your project.
+
+If you're gonna use it in Objective-C:
+
+- Copy CPSimpleHUDObjectiveCTypes too.
+- Add the import to your umbrella file:
+
+```
+#import "CPSimpleHUDObjectiveCTypes.h"
+```
+
+- Add the import in your Objective-C file where you're gonna use it:
+
+```
+#import "ProjectName-Swift.h"
+#import "CPSimpleHUDObjectiveCTypes.h"
+```
