@@ -43,6 +43,7 @@
 		5767C60A1A8167BA003BC821 /* DemoObjectiveCTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DemoObjectiveCTests.m; sourceTree = "<group>"; };
 		5767C6151A816859003BC821 /* DemoObjectiveC-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "DemoObjectiveC-Bridging-Header.h"; sourceTree = "<group>"; };
 		5767C6161A81685A003BC821 /* CPSimpleHUD.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CPSimpleHUD.swift; path = ../../../SimpleHUD/CPSimpleHUD.swift; sourceTree = "<group>"; };
+		57DA45271A840609003A70F0 /* CPSimpleHUDObjectiveCTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CPSimpleHUDObjectiveCTypes.h; path = ../../../SimpleHUD/CPSimpleHUDObjectiveCTypes.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -126,6 +127,7 @@
 		5767C6141A816808003BC821 /* SimpleHUD */ = {
 			isa = PBXGroup;
 			children = (
+				57DA45271A840609003A70F0 /* CPSimpleHUDObjectiveCTypes.h */,
 				5767C6161A81685A003BC821 /* CPSimpleHUD.swift */,
 				5767C6151A816859003BC821 /* DemoObjectiveC-Bridging-Header.h */,
 			);
@@ -360,6 +362,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				DEFINES_MODULE = YES;
 				INFOPLIST_FILE = DemoObjectiveC/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -373,6 +376,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				DEFINES_MODULE = YES;
 				INFOPLIST_FILE = DemoObjectiveC/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -433,6 +437,7 @@
 				5767C6101A8167BA003BC821 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		5767C6111A8167BA003BC821 /* Build configuration list for PBXNativeTarget "DemoObjectiveCTests" */ = {
 			isa = XCConfigurationList;
@@ -441,6 +446,7 @@
 				5767C6131A8167BA003BC821 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

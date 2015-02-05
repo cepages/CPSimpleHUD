@@ -8,6 +8,7 @@
 
 #import "ViewController.h"
 #import "DemoObjectiveC-Swift.h"
+#import "CPSimpleHUDObjectiveCTypes.h"
 
 static NSInteger INITIAL_REMAIN_TIME = 10;
 
@@ -39,7 +40,7 @@ static NSInteger INITIAL_REMAIN_TIME = 10;
     hud.loadingLabel.text = @"Simple HUD";
     hud.heightDarkViewContraint.constant = 250;
     hud.widthDarkViewContraint.constant = 250;
-    
+    hud.waitingMode = WaitingTypeSmallCubesLinear;
     [hud show];
     
     
